@@ -1,0 +1,36 @@
+{
+  "name": "animating-icons",
+  "version": "1.0.0",
+  "description": "A method for animating SVG icons so each gesture is the icon's own meaning acting on itself. A Claude Code skill.",
+  "type": "module",
+  "bin": {
+    "animating-icons": "bin/install.mjs"
+  },
+  "files": [
+    "bin",
+    "skills",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "claude-code",
+    "claude-skill",
+    "icons",
+    "svg",
+    "animation",
+    "motion",
+    "phosphor",
+    "lucide",
+    "hugeicons"
+  ],
+  "author": "Bakai Tolondu (https://bakai.me)",
+  "license": "MIT",
+  "homepage": "https://github.com/kai956/animating-icons",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kai956/animating-icons.git"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "animating-icons",
+  "version": "1.0.0",
+  "description": "A method for animating SVG icons so each gesture is the icon's own meaning acting on itself, not a generic wiggle. Families, mechanics, morph correspondence, and a measurement-based verification harness.",
+  "author": {
+    "name": "Bakai Tolondu",
+    "url": "https://bakai.me"
+  },
+  "homepage": "https://github.com/kai956/animating-icons",
+  "repository": "https://github.com/kai956/animating-icons",
+  "license": "MIT",
+  "keywords": ["icons", "svg", "animation", "motion", "phosphor", "lucide", "hugeicons", "design-engineering"],
+  "skills": "./skills/"
+}
