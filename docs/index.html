@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>animating-icons — a skill for icons that do something</title>
+    <meta
+      name="description"
+      content="A Claude Code skill for animating SVG icons: every icon gets a gesture only that object could do. Twelve families, a failure catalog, a verify harness that measures instead of eyeballing."
+    />
+    <link rel="canonical" href="https://soralabsoss.github.io/skills/" />
+    <meta name="theme-color" content="#fdfdfc" />
+
+    <!-- Favicons -->
+    <link rel="icon" href="assets/favicon.ico" sizes="any" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="assets/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="assets/favicon-16x16.png"
+    />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="animating-icons" />
+    <meta
+      property="og:title"
+      content="animating-icons — a skill for icons that do something"
+    />
+    <meta
+      property="og:description"
+      content="A Claude Code skill for animating SVG icons: every icon gets a gesture only that object could do. Twelve families, a failure catalog, a verify harness that measures instead of eyeballing."
+    />
+    <meta property="og:url" content="https://soralabsoss.github.io/skills/" />
+    <meta
+      property="og:image"
+      content="https://soralabsoss.github.io/skills/assets/og-image.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="animating-icons — a skill for icons that do something"
+    />
+    <meta
+      name="twitter:description"
+      content="A Claude Code skill for animating SVG icons: every icon gets a gesture only that object could do."
+    />
+    <meta
+      name="twitter:image"
+      content="https://soralabsoss.github.io/skills/assets/og-image.png"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Caveat:wght@500..600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --body-color: #111;
+        --body-bg: #fdfdfc;
+        --muted: rgba(0, 0, 0, 0.4);
+        --line: #e6e6e4;
+        --box: #f2f2f2;
+        --accent: #2f6df6;
+        --font-primary:
+          "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        --font-script: "Caveat", ui-serif, cursive;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        background: var(--body-bg);
+        color: var(--body-color);
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: none;
+      }
+      body {
+        margin: 0;
+        font-family: var(--font-primary);
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      }
+
+      /* fixed top fade — matches the article's scroll masthead */
+      .fade {
+        content: "";
+        pointer-events: none;
+        z-index: 9;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 8rem;
+        background: linear-gradient(
+          180deg,
+          #fdfdfc 0,
+          hsla(60, 6%, 99%, 0.738) 19%,
+          hsla(60, 6%, 99%, 0.541) 34%,
+          hsla(60, 6%, 99%, 0.382) 47%,
+          hsla(60, 6%, 99%, 0.278) 56.5%,
+          hsla(60, 6%, 99%, 0.194) 65%,
+          hsla(60, 6%, 99%, 0.126) 73%,
+          hsla(60, 6%, 99%, 0.075) 80.2%,
+          hsla(60, 6%, 99%, 0.042) 86.1%,
+          hsla(60, 6%, 99%, 0.021) 91%,
+          hsla(60, 6%, 99%, 0.008) 95.2%,
+          hsla(60, 6%, 99%, 0.002) 98.2%,
+          hsla(60, 6%, 99%, 0)
+        );
+      }
+      @media screen and (max-width: 768px) {
+        .fade {
+          height: 2.5rem;
+        }
+      }
+
+      .container {
+        padding: 5rem 1rem 2.5rem;
+        max-width: 36.375rem;
+        margin: 0 auto;
+      }
+      @media screen and (max-width: 768px) {
+        .container {
+          padding: 2rem 1.5rem 2.5rem;
+        }
+      }
+
+      .article {
+        max-width: 70ch;
+      }
+
+      /* header */
+      .article > header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        padding: 0 0 0.75rem;
+      }
+      .article > header h1 {
+        margin: 0;
+        color: #111;
+        font-weight: 600;
+        font-size: 1.0625rem;
+        line-height: 1.25rem;
+        letter-spacing: -0.021rem;
+      }
+      .article > header time {
+        color: var(--muted);
+        font-weight: 460;
+        font-size: 0.8125rem;
+        line-height: 1.25rem;
+        letter-spacing: -0.00563rem;
+      }
+      .article > header time b {
+        color: var(--accent);
+        font-weight: 560;
+      }
+
+      /* body copy */
+      .article p {
+        margin: 0;
+        padding-top: 1rem;
+        font-size: 0.875rem;
+        font-weight: 460;
+        line-height: 1.25rem;
+        letter-spacing: -0.00563rem;
+      }
+      .article p strong {
+        font-weight: 600;
+      }
+      .article em {
+        font-style: italic;
+      }
+
+      /* section headings */
+      .article h2 {
+        position: relative;
+        margin: 0;
+        padding-top: 2.25rem;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        line-height: normal;
+        letter-spacing: -0.00813rem;
+        text-wrap: balance;
+      }
+      .article h2::before {
+        content: "";
+        position: absolute;
+        left: -0.85rem;
+        top: 2.55rem;
+        width: 5px;
+        height: 5px;
+        border-radius: 1.5px;
+        background: var(--accent);
+      }
+      .article h2 + p {
+        padding-top: 1rem;
+      }
+
+      /* lists */
+      .article ul {
+        margin: 0;
+        padding: 1.5rem 0 0 1.1rem;
+        list-style: none;
+      }
+      .article ul li {
+        position: relative;
+        padding-left: 0.35rem;
+        margin: 0.55rem 0;
+        font-size: 0.875rem;
+        font-weight: 460;
+        line-height: 1.25rem;
+        letter-spacing: -0.00563rem;
+      }
+      .article ul li::before {
+        content: "";
+        position: absolute;
+        left: -0.75rem;
+        top: 0.5rem;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.3);
+      }
+      .article ul li strong {
+        font-weight: 600;
+      }
+
+      /* links — basic-link underline */
+      a {
+        position: relative;
+        display: inline;
+        color: inherit;
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+      a::before {
+        pointer-events: none;
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        border-radius: 2px;
+        background: #d9d9d9;
+        transition: inherit;
+      }
+      a:hover::before {
+        background: var(--accent);
+      }
+
+      /* inline icon in prose */
+      .inlineicon {
+        display: inline-block;
+        vertical-align: text-top;
+      }
+      .inlineicon svg {
+        display: block;
+      }
+
+      code {
+        font-family:
+          ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+        font-size: 0.8125rem;
+        background: var(--box);
+        padding: 1px 5px;
+        border-radius: 5px;
+      }
+
+      /* demo stage — notation */
+      .stage {
+        position: relative;
+        padding-top: 1rem;
+      }
+      .demo {
+        display: flex;
+        justify-content: center;
+        padding: 4rem 0;
+      }
+
+      /* hand-drawn bracket (benji's rough.js output, baked in) */
+      .brace path {
+        fill: none;
+        stroke: #4a4a4a;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        animation: draw 0.6s ease forwards;
+      }
+      .brace path:nth-child(1) {
+        animation-duration: 0.12s;
+      }
+      .brace path:nth-child(2) {
+        animation-delay: 0.12s;
+        animation-duration: 0.6s;
+      }
+      .brace path:nth-child(3) {
+        animation-delay: 0.72s;
+        animation-duration: 0.12s;
+      }
+      @keyframes draw {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      .brace-d {
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        height: 196px;
+        width: auto;
+        overflow: visible;
+        transform: translate(0.5rem, -50%);
+      }
+      .brace-m {
+        display: none;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .brace path {
+          animation: none;
+          stroke-dashoffset: 0;
+        }
+      }
+      .demo button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 64px;
+        border: none;
+        border-radius: 8px;
+        background: #f2f2f2;
+        color: #242424;
+        cursor: pointer;
+        transition: background 150ms ease;
+      }
+      .demo button:hover {
+        background: #ececec;
+      }
+      .demo button:focus-visible {
+        outline: 2px solid #3b82f6;
+        outline-offset: 3px;
+      }
+      .demo svg {
+        display: block;
+        overflow: visible;
+        width: 48px;
+        height: 48px;
+      }
+
+      /* absolutely-positioned cursive note floating to the right of the demo */
+      .hint {
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        padding: 1rem 0 0;
+        transform: translateX(3rem) translateY(-50%);
+        max-width: 14rem;
+        width: 100%;
+        text-align: left;
+        text-wrap: balance;
+        font-family: var(--font-script);
+        color: #4a4a4a;
+        font-size: 1.375rem;
+        font-weight: 500;
+        line-height: 95%;
+        letter-spacing: -0.0025rem;
+        user-select: none;
+      }
+      @media screen and (max-width: 1080px) {
+        .stage {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .demo {
+          padding: 3rem 0 0;
+        }
+        .brace-d {
+          display: none;
+        }
+        .brace-m {
+          display: block;
+          width: 72%;
+          max-width: 320px;
+          height: auto;
+          overflow: visible;
+          margin-top: 1.25rem;
+        }
+        .hint {
+          position: relative;
+          top: auto;
+          left: auto;
+          transform: none;
+          margin: 0 auto;
+          padding: 1rem 0 0;
+          text-align: center;
+        }
+      }
+
+      /* install blocks */
+      .install {
+        margin-top: 1rem;
+        background: #f7f7f6;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 0.85rem 1rem;
+        font-family:
+          ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+        font-size: 0.8125rem;
+        line-height: 1.5;
+        overflow-x: auto;
+      }
+      .install .c {
+        color: var(--muted);
+      }
+
+      /* sample prompts */
+      .prompt {
+        margin-top: 1rem;
+        padding: 0.35rem 0 0.35rem 1rem;
+        border-left: 2px solid var(--accent);
+      }
+      .prompt .c {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: var(--accent);
+        font-size: 0.6875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04rem;
+      }
+      .prompt q {
+        display: block;
+        quotes: none;
+        font-size: 0.875rem;
+        font-weight: 460;
+        line-height: 1.4rem;
+        letter-spacing: -0.00563rem;
+        color: #3a3a3a;
+      }
+      .prompt q::before,
+      .prompt q::after {
+        content: "";
+      }
+      .prompt code {
+        font-size: 0.78rem;
+      }
+
+      .links {
+        display: flex;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+        padding-top: 2.25rem;
+        font-size: 0.875rem;
+        font-weight: 460;
+        letter-spacing: -0.00563rem;
+      }
+      .links a {
+        color: rgba(0, 0, 0, 0.65);
+      }
+      .links a:hover {
+        color: var(--accent);
+      }
+
+      .foot {
+        padding-top: 3rem;
+        color: var(--muted);
+        font-size: 0.75rem;
+        font-weight: 460;
+        line-height: 1.4;
+        letter-spacing: 0.00063rem;
+      }
+      .foot a {
+        color: rgba(0, 0, 0, 0.55);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fade"></div>
+    <div class="container">
+      <article class="article">
+        <header>
+          <h1>Animating icons</h1>
+          <time>A Claude Code skill · by <b>SoraLabs</b></time>
+        </header>
+
+        <p>
+          An icon is not a picture you move. It is an object that
+          <strong>does something</strong>, and the animation is that thing
+          happening once. A bell rings. A plug comes out of its socket. The
+          hamburger menu that rotates into an
+          <span class="inlineicon" style="color: #9f9f9e">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M13 5L5 13" stroke="currentColor" stroke-width="1.5" />
+              <path d="M13 13L5 5" stroke="currentColor" stroke-width="1.5" />
+            </svg> </span
+          >. The motion has to be something only <em>that</em> object could do.
+        </p>
+
+        <p>
+          Most animated-icon libraries fail here: they translate the whole
+          <code>&lt;svg&gt;</code> by a few pixels, and the exact same keyframes
+          would look identical on any icon in the set. That is decoration. This
+          skill is the discipline it takes to do the other thing — and hold the
+          line across thousands of glyphs.
+        </p>
+
+        <div class="stage">
+          <div class="demo">
+            <button id="cycle" aria-label="Cycle the icon">
+              <svg id="icon" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <g id="grp">
+                  <line
+                    class="ln"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    class="ln"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    class="ln"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                </g>
+              </svg>
+            </button>
+          </div>
+          <svg
+            class="brace brace-d"
+            viewBox="547 5 19 214"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              pathLength="1"
+              d="M550.399 6.814 C552.222 9.423 558.555 7.105 563.661 8.559"
+            />
+            <path
+              pathLength="1"
+              d="M563.514 7.132 C561.962 53.564 559.428 95.787 560.350 216.163"
+            />
+            <path
+              pathLength="1"
+              d="M560.472 215.349 C556.498 214.742 554.357 216.613 548.223 217.581"
+            />
+          </svg>
+          <svg
+            class="brace brace-m"
+            viewBox="-11 205 556 18"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              pathLength="1"
+              d="M-9.401 208.449 C-7.390 211.370 -8.123 214.221 -9.360 220.824"
+            />
+            <path
+              pathLength="1"
+              d="M-6.993 221.032 C184.742 217.223 375.005 216.904 542.672 220.942"
+            />
+            <path
+              pathLength="1"
+              d="M541.281 218.224 C541.869 217.133 542.606 212.266 540.591 207.802"
+            />
+          </svg>
+          <div class="hint">click to cycle</div>
+        </div>
+
+        <p>
+          That widget is one UI slot where any icon becomes any other — the
+          <strong>three-line system</strong>. Every icon is exactly three SVG
+          lines; icons that need fewer collapse the extras to an invisible point
+          at the centre. <code>menu → cross</code> tweens the line coordinates.
+          <code>cross ↔ plus</code> is the same shape 45° apart, so it
+          <em>rotates</em> rather than warping the lines. No crossfade — the
+          lines genuinely transform.
+        </p>
+
+        <h2>The four gates</h2>
+        <p>
+          Every icon passes all four, verified by
+          <em>rendering and measuring</em>, never by reasoning:
+        </p>
+        <ul>
+          <li>
+            <strong>Swap test</strong> — could these keyframes be pasted onto a
+            different icon and still look fine? If yes, it is decoration.
+          </li>
+          <li>
+            <strong>Rest test</strong> — frame 0 and the final frame are
+            pixel-identical to the untouched source glyph. Hovering an icon must
+            never change what it looks like afterward.
+          </li>
+          <li>
+            <strong>Strip test</strong> — every intermediate frame still reads
+            as the icon, not a pile of disassembled parts.
+          </li>
+          <li>
+            <strong>Motion test</strong> — the delivered speed is read back off
+            the browser's own computed matrix and differentiated. Peak under the
+            aliasing ceiling; anything meant to stop actually reaches zero.
+          </li>
+        </ul>
+
+        <h2>What's in it</h2>
+        <p>
+          Twelve gesture families (draw-on, hinge, travel-and-return,
+          fall-and-land, pulse-from-source, and more), a seventeen-item catalog
+          of the ways these break, the vector-morph correspondence method, the
+          three-line icon-to-icon system you just clicked, and a verify harness
+          that freezes the animation at any timestamp and screenshots it. Every
+          number in the skill was paid for once, by hand.
+        </p>
+
+        <h2>Install</h2>
+        <p>
+          Drop it into any coding agent — Claude Code, Cursor, Codex, and more:
+        </p>
+        <div class="install">
+          <span class="c"># any agent</span><br />
+          npx skills add SoraLabsOSS/skills
+        </div>
+        <div class="install">
+          <span class="c"># or as a Claude Code plugin</span><br />
+          /plugin marketplace add SoraLabsOSS/skills<br />
+          /plugin install animating-icons@soralabs
+        </div>
+
+        <h2>Prompts that hold the line</h2>
+        <p>
+          The skill wakes up on its own when you ask for icon motion — but the
+          wording still decides whether you get a real gesture or just
+          decoration. Three we keep reaching for:
+        </p>
+        <div class="prompt">
+          <span class="c">The default prompt</span>
+          <q
+            >Here's the icon. Find the verb it already stands for, and animate
+            that verb happening exactly once. Pick the mechanism the shape
+            actually calls for — a transform if the part is rigid, a morph if
+            the material truly bends, a mask if something needs to pass behind
+            another part, stroke-dashoffset if a line is meant to be drawn. Pull
+            every number from the path itself, never from intuition. When it's
+            done, the icon should settle back into exactly what it started
+            as.</q
+          >
+        </div>
+        <div class="prompt">
+          <span class="c">The reasoning-first prompt</span>
+          <q
+            >Before touching a single keyframe: name the verb this object
+            performs, name the one part responsible for it, and name the
+            mechanism that verb demands. Then state explicitly what stays
+            untouched, and why it stays untouched.</q
+          >
+        </div>
+        <div class="prompt">
+          <span class="c">The gatekeeping prompt</span>
+          <q
+            >Stop before animating: does this icon contain a real gesture, or is
+            it just a noun with nothing to enact? If there's no genuine verb
+            hiding in it, say that plainly, and let it stay still.</q
+          >
+        </div>
+
+        <div class="links">
+          <a href="https://github.com/SoraLabsOSS/skills">GitHub</a>
+          <a href="https://skills.sh/soralabsoss/skills/animating-icons"
+            >skills.sh</a
+          >
+          <a
+            href="https://github.com/SoraLabsOSS/skills/blob/main/skills/animating-icons/EXAMPLES.md"
+            >Worked examples</a
+          >
+        </div>
+
+        <p class="foot">
+          Built by the team behind
+          <a href="http://ui.soralabs.io.vn/">Sora UI</a>. Morphing technique
+          from
+          <a href="https://benji.org/morphing-icons-with-claude">Benji Taylor</a
+          >. Timing instincts from
+          <a href="https://animations.dev">Emil Kowalski</a>. MIT.
+        </p>
+      </article>
+    </div>
+
+    <script>
+      // Three-line icon set — real coordinates in a 14×14 box centred on (7,7).
+      // A line with x1===x2 && y1===y2 is a collapsed (invisible) slot.
+      const ICONS = {
+        menu: {
+          group: null,
+          angle: 0,
+          lines: [
+            [2.5, 4, 11.5, 4],
+            [2.5, 7, 11.5, 7],
+            [2.5, 10, 11.5, 10],
+          ],
+        },
+        cross: {
+          group: "x",
+          angle: 45,
+          lines: [
+            [9.82842712, 4.17157288, 4.17157288, 9.82842712],
+            [4.17157288, 4.17157288, 9.82842712, 9.82842712],
+            [7, 7, 7, 7],
+          ],
+        },
+        plus: {
+          group: "x",
+          angle: 0,
+          lines: [
+            [7, 3, 7, 11],
+            [3, 7, 11, 7],
+            [7, 7, 7, 7],
+          ],
+        },
+        check: {
+          group: null,
+          angle: 0,
+          lines: [
+            [2.5, 7, 5.5, 10.5],
+            [5.5, 10.5, 11.5, 4],
+            [7, 7, 7, 7],
+          ],
+        },
+      };
+      const ORDER = ["menu", "cross", "plus", "check"];
+
+      const grp = document.getElementById("grp");
+      const lines = [...document.querySelectorAll(".ln")];
+      const btn = document.getElementById("cycle");
+
+      const collapsed = ([x1, y1, x2, y2]) => x1 === x2 && y1 === y2;
+      const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5);
+      const DUR = 520;
+
+      let idx = 0;
+      let cur = ICONS[ORDER[0]].lines.map((l) => l.slice());
+      let animating = false;
+
+      function paint(coords, deg) {
+        lines.forEach((el, i) => {
+          const [x1, y1, x2, y2] = coords[i];
+          el.setAttribute("x1", x1);
+          el.setAttribute("y1", y1);
+          el.setAttribute("x2", x2);
+          el.setAttribute("y2", y2);
+          el.setAttribute("opacity", collapsed(coords[i]) ? 0 : 1);
+        });
+        grp.setAttribute("transform", deg ? `rotate(${deg} 7 7)` : "");
+      }
+
+      paint(cur, 0);
+
+      const prefersReduce = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      function go(fromName, toName) {
+        const from = ICONS[fromName],
+          to = ICONS[toName];
+        const sameGroup = from.group && from.group === to.group;
+        animating = true;
+
+        if (prefersReduce) {
+          // essential state change stays instant
+          cur = to.lines.map((l) => l.slice());
+          paint(cur, 0);
+          animating = false;
+          return;
+        }
+
+        const start = performance.now();
+
+        if (sameGroup) {
+          // rotate the whole group; snap to target coords at the end
+          const delta = to.angle - from.angle;
+          const step = (now) => {
+            const t = Math.min(1, (now - start) / DUR);
+            const e = easeOutQuint(t);
+            grp.setAttribute("transform", `rotate(${e * delta} 7 7)`);
+            if (t < 1) requestAnimationFrame(step);
+            else {
+              cur = to.lines.map((l) => l.slice());
+              paint(cur, 0);
+              animating = false;
+            }
+          };
+          requestAnimationFrame(step);
+        } else {
+          // tween each coordinate from current to target
+          const A = cur.map((l) => l.slice());
+          const B = to.lines;
+          const step = (now) => {
+            const t = Math.min(1, (now - start) / DUR);
+            const e = easeOutQuint(t);
+            const frame = A.map((l, i) =>
+              l.map((v, k) => v + (B[i][k] - v) * e),
+            );
+            paint(frame, 0);
+            if (t < 1) requestAnimationFrame(step);
+            else {
+              cur = B.map((l) => l.slice());
+              paint(cur, 0);
+              animating = false;
+            }
+          };
+          requestAnimationFrame(step);
+        }
+      }
+
+      btn.addEventListener("click", () => {
+        if (animating) return;
+        const from = ORDER[idx];
+        idx = (idx + 1) % ORDER.length;
+        go(from, ORDER[idx]);
+      });
+    </script>
+  </body>
+</html>
