@@ -6,8 +6,8 @@
     "name": "SoraLabs",
     "url": "https://github.com/SoraLabsOSS"
   },
-  "homepage": "https://github.com/SoraLabsOSS/animating-icons",
-  "repository": "https://github.com/SoraLabsOSS/animating-icons",
+  "homepage": "https://github.com/SoraLabsOSS/skills",
+  "repository": "https://github.com/SoraLabsOSS/skills",
   "license": "MIT",
   "keywords": ["icons", "svg", "animation", "motion", "phosphor", "lucide", "hugeicons", "design-engineering"],
   "skills": "./skills/"

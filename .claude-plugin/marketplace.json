@@ -1,11 +1,11 @@
 {
-  "name": "animating-icons",
+  "name": "soralabs",
   "owner": {
     "name": "SoraLabs",
     "url": "https://github.com/SoraLabsOSS"
   },
   "metadata": {
-    "description": "The animating-icons skill: a measured method for giving every SVG icon a gesture only that object could do."
+    "description": "SoraLabs skills. Currently: animating-icons, a measured method for giving every SVG icon a gesture only that object could do."
   },
   "plugins": [
     {
@@ -16,8 +16,8 @@
       "category": "design",
       "tags": ["icons", "svg", "animation", "motion", "design-engineering"],
       "author": { "name": "SoraLabs" },
-      "homepage": "https://github.com/SoraLabsOSS/animating-icons",
-      "repository": "https://github.com/SoraLabsOSS/animating-icons",
+      "homepage": "https://github.com/SoraLabsOSS/skills",
+      "repository": "https://github.com/SoraLabsOSS/skills",
       "license": "MIT"
     }
   ]

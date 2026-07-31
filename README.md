@@ -1,6 +1,6 @@
 # animating-icons
 
-[![skills.sh](https://skills.sh/b/SoraLabsOSS/animating-icons)](https://skills.sh/SoraLabsOSS/animating-icons)
+[![skills.sh](https://skills.sh/b/SoraLabsOSS/skills)](https://skills.sh/SoraLabsOSS/skills)
 
 A Claude Code skill for animating SVG icons.
 
@@ -15,21 +15,21 @@ Built while animating a set of icons by hand, one at a time. Every number in it 
 **As a plugin** (recommended — you get it in every project, and `/plugin update` pulls changes). Inside Claude Code:
 
 ```
-/plugin marketplace add SoraLabsOSS/animating-icons
-/plugin install animating-icons@animating-icons
+/plugin marketplace add SoraLabsOSS/skills
+/plugin install animating-icons@soralabs
 ```
 
 **Via [skills.sh](https://skills.sh)** — works for Claude Code, Cursor, Codex, and other agents:
 
 ```bash
-npx skills add SoraLabsOSS/animating-icons
+npx skills add SoraLabsOSS/skills
 ```
 
 **Or drop the files in** — no npm account or plugin system involved:
 
 ```bash
-npx github:SoraLabsOSS/animating-icons            # into ./.claude/skills  (this project)
-npx github:SoraLabsOSS/animating-icons --global   # into ~/.claude/skills  (every project)
+npx github:SoraLabsOSS/skills            # into ./.claude/skills  (this project)
+npx github:SoraLabsOSS/skills --global   # into ~/.claude/skills  (every project)
 ```
 
 **Or just copy it.** It is six markdown files and two helper scripts. `skills/animating-icons/` into your `.claude/skills/`.

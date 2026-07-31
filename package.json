@@ -25,10 +25,10 @@
   ],
   "author": "SoraLabs (https://github.com/SoraLabsOSS)",
   "license": "MIT",
-  "homepage": "https://github.com/SoraLabsOSS/animating-icons",
+  "homepage": "https://github.com/SoraLabsOSS/skills",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SoraLabsOSS/animating-icons.git"
+    "url": "git+https://github.com/SoraLabsOSS/skills.git"
   },
   "engines": {
     "node": ">=18"
