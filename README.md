@@ -1,5 +1,7 @@
 # animating-icons
 
+[![skills.sh](https://skills.sh/b/SoraLabsOSS/animating-icons)](https://skills.sh/SoraLabsOSS/animating-icons)
+
 A Claude Code skill for animating SVG icons.
 
 An icon is not a picture you move. It is an object that **does something**, and the animation is that thing happening once. A bell rings, a plug comes out of its socket, a branch writes itself. The motion has to be something only *that* object could do.
@@ -15,6 +17,12 @@ Built while animating a set of icons by hand, one at a time. Every number in it 
 ```
 /plugin marketplace add SoraLabsOSS/animating-icons
 /plugin install animating-icons@animating-icons
+```
+
+**Via [skills.sh](https://skills.sh)** — works for Claude Code, Cursor, Codex, and other agents:
+
+```bash
+npx skills add SoraLabsOSS/animating-icons
 ```
 
 **Or drop the files in** — no npm account or plugin system involved:
