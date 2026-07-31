@@ -1,8 +1,8 @@
 {
   "name": "animating-icons",
   "owner": {
-    "name": "Bakai Tolondu",
-    "url": "https://bakai.me"
+    "name": "SoraLabs",
+    "url": "https://github.com/SoraLabsOSS"
   },
   "metadata": {
     "description": "The animating-icons skill: a measured method for giving every SVG icon a gesture only that object could do."
@@ -11,13 +11,13 @@
     {
       "name": "animating-icons",
       "source": ".",
-      "description": "Author, review, or batch-produce hover animations for SVG icons. Eleven gesture families, a seventeen-item failure catalog, the vector-morph correspondence method, and a verification harness that measures instead of eyeballing.",
-      "version": "1.0.0",
+      "description": "Author, review, or batch-produce hover animations for SVG icons. Twelve gesture families, a seventeen-item failure catalog, the vector-morph correspondence method, the three-line icon-to-icon morph system, and a verification harness that measures instead of eyeballing.",
+      "version": "1.1.0",
       "category": "design",
       "tags": ["icons", "svg", "animation", "motion", "design-engineering"],
-      "author": { "name": "Bakai Tolondu" },
-      "homepage": "https://github.com/kai956/animating-icons",
-      "repository": "https://github.com/kai956/animating-icons",
+      "author": { "name": "SoraLabs" },
+      "homepage": "https://github.com/SoraLabsOSS/animating-icons",
+      "repository": "https://github.com/SoraLabsOSS/animating-icons",
       "license": "MIT"
     }
   ]

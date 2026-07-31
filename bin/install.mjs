@@ -18,8 +18,8 @@ if (has("-h", "--help")) {
     console.log(`
   ${SKILL} — install the skill into Claude Code
 
-  npx github:kai956/animating-icons            into ./.claude/skills  (this project)
-  npx github:kai956/animating-icons --global   into ~/.claude/skills  (every project)
+  npx github:SoraLabsOSS/animating-icons            into ./.claude/skills  (this project)
+  npx github:SoraLabsOSS/animating-icons --global   into ~/.claude/skills  (every project)
 
   --force   overwrite an existing copy
   --help    this

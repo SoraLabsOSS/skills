@@ -1,6 +1,6 @@
 # The gesture catalog
 
-Eleven families. Every icon gets one. A family is a **keyframe recipe parameterised by the icon's own geometry** — the shape of the motion is fixed, the numbers come from the file you are looking at.
+Twelve families. Every icon gets one. A family is a **keyframe recipe parameterised by the icon's own geometry** — the shape of the motion is fixed, the numbers come from the file you are looking at.
 
 This is what makes 5,400 icons a production line instead of 5,400 art projects. The name prefixes cluster hard: 94 `Arrow*`, 58 `Folder*`, 53 `Mail*`, 50 `Chart*`, 47 `Calendar*`, 34 `Cloud*`, 32 `Sun*`, 24 `Wifi*`. One family decision covers a whole cluster, and only the coordinates change per icon.
 
@@ -57,6 +57,7 @@ Set `pathLength="1"` on the path so the CSS talks in 0→1 instead of arc length
 - Leaving is the one place **ease-in** is correct. A rocket does not depart at its slowest.
 - Arriving is ease-out, and it should take roughly twice as long as leaving. Departure ⅓, return ⅔.
 - The travel axis is the icon's own axis. An arrow travels along the direction it points, not "to the right."
+- **A curved journey does not need nested transforms.** Give the mover `offset-path: path("…")` in the icon's own user units and animate `offset-distance` 0→100%; `offset-rotate: auto` faces it along the tangent (a paper plane banking through its arc), `offset-rotate: 0deg` keeps it upright. On an SVG child the path coordinates live in the viewBox space, so it scales for free like any other transform. One property, one timing function, where the nested-wrapper version needs two elements to fake the same arc.
 - The svg must **clip** (no `overflow: visible`) or the trick is exposed.
 
 **Hugeicons:** the 94 `Arrow*`, `Send*`, `Upload*`, `Download*`, `Export*`, `Import*`, `Share*`, `Logout*`, `Login*`, `Forward*`, `Rocket*`, `Airplane*`, `DeliveryTruck*`.
@@ -242,6 +243,22 @@ Set `pathLength="1"` on the path so the CSS talks in 0→1 instead of arc length
 - Rest lives on the `d` attribute of the element, and the last keyframe returns to it.
 
 **Hugeicons / hand sets:** `Book*` open↔shut, `Notebook*`, `Envelope*`/`Mail*` flaps, folding-hand gestures (fist, sign, pinch), `Origami*`, `Fold*`, anything drawn as two poses of one bending object.
+
+---
+
+## 12. Icon-swap
+
+**Verb:** it *becomes* another icon — one UI slot where the glyph transforms into a different glyph. Menu into cross, play into pause, arrow-right into arrow-down.
+
+**Mechanism:** the **three-line system**. Every icon in the swap set is exactly three SVG `<line>` elements; icons that need fewer collapse the extras to an invisible center point (`{ x1: 7, y1: 7, x2: 7, y2: 7 }`, `opacity: 0`). Shared structure means any icon can morph into any other. This is a different tool from the `d`-morph and has its own file: **read `ICON-MORPH.md` before using it.**
+
+**Rules**
+- **Rotation groups first.** Icons that are the same shape at different rotations (arrows and chevrons at 90°, plus/cross at 45°) share one coordinate set and animate rotation only. Morphing their coordinates bends and warps the lines; rotating just works.
+- **Everything else tweens coordinates** — each line interpolates its `x1 y1 x2 y2` to the target's values (Motion handles the tweening).
+- **Never crossfade.** Fading out and in is a swap, not a transformation, and it is exactly the naive answer this family exists to replace.
+- **Test every pair by playing it.** Awkward intermediate states and overshooting rotations only show up when you cycle transitions by hand; build a sequencer for it.
+
+**Scope:** utility sets — navigation, playback, math marks, arrows/chevrons. Not a fit for multi-path glyph libraries; those keep families 1–11.
 
 ---
 

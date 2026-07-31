@@ -1,6 +1,6 @@
 ---
 name: animating-icons
-description: Use when authoring, reviewing, or batch-producing hover animations for SVG icons — a Hugeicons/Lucide/Phosphor glyph that should move on hover, an icon library where every icon needs its own gesture, or an existing icon animation that reads as generic jiggle. Triggers on animated icon, icon hover, per-icon animation, icon gesture, stroke-dashoffset draw-on, pathLength, transform-box, transform-origin, icon keyframes.
+description: Use when authoring, reviewing, or batch-producing hover animations for SVG icons — a Hugeicons/Lucide/Phosphor glyph that should move on hover, an icon library where every icon needs its own gesture, an existing icon animation that reads as generic jiggle, or icons that morph into each other (menu↔cross, play↔pause). Triggers on animated icon, icon hover, per-icon animation, icon gesture, icon morph, morphing icons, stroke-dashoffset draw-on, pathLength, transform-box, transform-origin, icon keyframes.
 ---
 
 # Animating Icons
@@ -63,6 +63,7 @@ Before you touch a keyframe, decide which of four things is actually happening. 
 | The shape itself genuinely changes: paper bends, a book closes, a finger folds | a **`d`-morph** — the path authored twice, identical command structure, CSS `d` interpolated (see `MORPH.md`) | `scaleY`/`skew` fakery — a shear reads as squashing, not bending |
 | Something goes **inside** a container, **in front of** another part, or is a **hole** in a filled shape | a **mask** or **clipPath** carrying the mover's own silhouette | opacity; z-order — strokes do not occlude |
 | A line is written or erased | **`stroke-dashoffset`** | a fade |
+| One UI slot where **any icon becomes any other** (menu↔cross, play↔pause, arrow directions) | the **three-line morph system** — every icon is exactly three `<line>`s, rotation groups rotate, everything else tweens coordinates (see `ICON-MORPH.md`) | a crossfade; hand-matching `d` structures per pair |
 
 **The rigid-versus-deform call is the one people get wrong.** A stack of layers, a tray, a set of cards, a chevron closing over a pill — these look like they deform, and they do not. A chevron is just what a whole pill looks like when the pill above it covers most of it. The layers stay whole and slide; the covering is occlusion. Ask every time: is this the *object* changing shape, or my *view* of a rigid object changing? It is almost always the second, and the second is a transform, not a morph.
 
@@ -96,7 +97,7 @@ Almost always exactly one. The rest of the glyph holds still and is what the mov
 
 ### 4. Choose a family
 
-Do not invent a gesture per icon — 5,400 icons is not an art project, it is a production line. Pick from the catalog in **`FAMILIES.md`**: draw-on, travel-and-return, hinge, separate-and-rejoin, fall-and-land, fill-and-drain, pulse-from-source, step-and-hold, free-revolution, contents-in-frame, reshape. Each family is a keyframe recipe parameterised by the icon's own geometry.
+Do not invent a gesture per icon — 5,400 icons is not an art project, it is a production line. Pick from the catalog in **`FAMILIES.md`**: draw-on, travel-and-return, hinge, separate-and-rejoin, fall-and-land, fill-and-drain, pulse-from-source, step-and-hold, free-revolution, contents-in-frame, reshape, icon-swap. Each family is a keyframe recipe parameterised by the icon's own geometry.
 
 Reaching for a new family is allowed and should be rare. Add it to `FAMILIES.md` when you do.
 
@@ -116,7 +117,7 @@ When a number genuinely has no geometric source (a dwell, a decay ratio), it com
 
 Constraints, all non-negotiable:
 
-- **CSS keyframes, no JS animation library.** These fire constantly and must run off the main thread. It also means the icon has zero runtime dependency and works in every framework — the reason `lucide-animated` needed four separate community ports.
+- **CSS keyframes, no JS animation library.** These fire constantly and must run off the main thread. It also means the icon has zero runtime dependency and works in every framework — the reason `lucide-animated` needed four separate community ports. The one scoped exception is the **icon-swap family** (`ICON-MORPH.md`): that is a state transition driven by app state, not a hover gesture, and it tweens line coordinates with Motion by design.
 - **Nothing that triggers layout.** `transform` and `opacity` are the cheap pair; `stroke-dashoffset` and `stroke-dasharray` are paint-level and fine; `d` is the morph (`MORPH.md`) and `visibility` is the gate (failure #13), both discrete and both needing **both ends stated** (failure #16). Never `width`, `height`, `x`, `y`, `r`, `cx`, `cy`.
 - **Nothing in `px` outside the `<svg>`.** Inside an SVG, CSS transform lengths are *user units* and scale with the viewBox for free, so one keyframe set serves 16px and 96px. A transform on an HTML wrapper element is real screen px and silently breaks at every other size. See `TECHNIQUE.md` § Units.
 - **Authored to end on the resting picture.** The last keyframe is the rest state. Never rely on the animation being removed to get back.
@@ -198,7 +199,8 @@ Every animated icon honours `prefers-reduced-motion: reduce` by dropping to `ani
 
 - **`FAMILIES.md`** — the gesture catalog. Start here for any new icon.
 - **`MORPH.md`** — the vector-morph technique: authoring two paths, matching command structure, **correspondence (which point becomes which, and why arc length is not it)**, recovering geometry that is not in the file, and when NOT to morph. Read it before any hand-gesture or shape-change icon.
+- **`ICON-MORPH.md`** — icon-to-icon morphing: the three-line system where every icon is exactly three SVG lines (extras collapsed to invisible center points), rotation groups for same-shape icons, coordinate tweening for everything else. Read it when icons swap into each other's place rather than gesturing.
 - **`TECHNIQUE.md`** — SVG/CSS mechanics, the failure catalog, the playback driver, units.
 - **`VERIFY.md`** — frame strips, difference overlays, the noise floor, the two-pass review.
 
-**REQUIRED BACKGROUND:** `web-animation-design` for the duration/easing rules and the frequency gate; `emil-design-eng` for easing and duration judgment; `animation-craft` for the project's motion vocabulary.
+**BACKGROUND (use if installed, not required):** `web-animation-design` for the duration/easing rules and the frequency gate; `emil-design-eng` for easing and duration judgment; `animation-craft` for the project's motion vocabulary. This skill stands alone without them — the budget table and `TECHNIQUE.md` § Easing carry the essentials.

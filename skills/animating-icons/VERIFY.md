@@ -122,7 +122,7 @@ What to look for at 4×:
 
 ## Snappiness
 
-Bakai's word, and it has a concrete definition, learned in `RollingNumber.tsx`:
+The author's word, and it has a concrete definition, learned in `RollingNumber.tsx`:
 
 > A spring's asymptotic tail is what reads as "not snappy"; a tween with high initial velocity and a hard finish snaps.
 
@@ -185,6 +185,36 @@ Two of the scariest numbers you will see are your own measurement mistakes. When
 ## A one-command harness
 
 Per-icon verification is ~10 manual browse calls; fold it into one script and it becomes one call plus one strip read. The gates that matter, in order: **source vs rest** (px > 8 after the corner-AA allowance), **frame 0 vs final** (0 or noise-floor), the **paused strip** read at 3×, and a **live hover run** (dispatch pointerover, wait for the driver to clear `data-go`, diff before/after — must be 0). Recreate the script freely; it is short, and having it is what makes a second pass cheap enough to actually do.
+
+## The `?t=N` seek harness
+
+For a quick spot-check that does not need the full strip, bake a seek hook into the test page: `?t=N` starts the gesture through the real trigger, then pauses every animation at `t` seconds, so a headless screenshot lands on a deterministic still.
+
+```html
+<script>
+  const t = new URLSearchParams(location.search).get("t");
+  if (t !== null) {
+    icon.setAttribute("data-go", "");                     // the REAL trigger, not a shortcut
+    requestAnimationFrame(() => {
+      const anims = icon.getAnimations({ subtree: true });
+      console.assert(anims.length > 0, "no animations — the harness is measuring nothing");
+      anims.forEach((a) => { a.pause(); a.currentTime = parseFloat(t) * 1000; });
+      window.__ready = true;
+    });
+  }
+</script>
+```
+
+Assert the animation count before trusting the frame (§ A probe that returns 0), and remember a paused animation keeps applying its effect — capture rest on a clean load with no `?t` at all, never by un-pausing.
+
+Two shipped helpers drive it (`scripts/`, adapted from `iart-ai/web-animation-skills`):
+
+```bash
+scripts/seek-shot.sh icon.html 0 0.4 0.8       # frozen screenshots at those times
+scripts/contact-sheet.sh sheet.png frame-*.png  # tile start | mid | end into one image
+```
+
+Then **Read the sheet** — one image seen whole is how a dead segment or an adjacent-frame jump actually gets noticed.
 
 ---
 

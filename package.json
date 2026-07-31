@@ -1,6 +1,6 @@
 {
   "name": "animating-icons",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A method for animating SVG icons so each gesture is the icon's own meaning acting on itself. A Claude Code skill.",
   "type": "module",
   "bin": {
@@ -23,12 +23,12 @@
     "lucide",
     "hugeicons"
   ],
-  "author": "Bakai Tolondu (https://bakai.me)",
+  "author": "SoraLabs (https://github.com/SoraLabsOSS)",
   "license": "MIT",
-  "homepage": "https://github.com/kai956/animating-icons",
+  "homepage": "https://github.com/SoraLabsOSS/animating-icons",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kai956/animating-icons.git"
+    "url": "git+https://github.com/SoraLabsOSS/animating-icons.git"
   },
   "engines": {
     "node": ">=18"

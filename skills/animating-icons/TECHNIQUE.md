@@ -393,7 +393,7 @@ Measure the centres, do not invent them: at each sampled time, find the fraction
 
 ## Units — and why one keyframe set serves every size
 
-Bakai's question: *if we author keyframes once, do they scale up?* **Yes, as long as the motion lives inside the `<svg>`.**
+The author's question: *if we author keyframes once, do they scale up?* **Yes, as long as the motion lives inside the `<svg>`.**
 
 | Where the transform is | What `10px` means | Scales with icon size? |
 |---|---|---|
