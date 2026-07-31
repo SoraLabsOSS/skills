@@ -32,7 +32,7 @@ npx github:SoraLabsOSS/skills            # into ./.claude/skills  (this project)
 npx github:SoraLabsOSS/skills --global   # into ~/.claude/skills  (every project)
 ```
 
-**Or just copy it.** It is six markdown files and two helper scripts. `skills/animating-icons/` into your `.claude/skills/`.
+**Or just copy it.** It is seven markdown files and two helper scripts. `skills/animating-icons/` into your `.claude/skills/`.
 
 ## Using it
 
@@ -54,6 +54,7 @@ Prompts that work well with it:
 |---|---|
 | `SKILL.md` | The core principle, the swap test, the four gates, **landing on rest**, choosing the mechanism, the procedure, the budget |
 | `FAMILIES.md` | The twelve gesture families — draw-on, travel-and-return, hinge, separate-and-rejoin, fall-and-land, fill-and-drain, pulse-from-source, step-and-hold, free revolution, contents-in-frame, reshape, icon-swap |
+| `EXAMPLES.md` | Four golden examples worked end-to-end — hinge bell, travel-and-return send, sequenced draw-on, three-line icon-swap with real coordinates — every number annotated with where it came from |
 | `TECHNIQUE.md` | SVG/CSS mechanics: the failure catalog, fill weight, clearance sweeps, units, easing, the playback driver |
 | `MORPH.md` | The vector morph, and **correspondence** — which point becomes which, and why arc length is not it |
 | `ICON-MORPH.md` | Icon-to-icon morphing — the three-line system: every icon is three SVG lines, rotation groups rotate, everything else tweens coordinates |

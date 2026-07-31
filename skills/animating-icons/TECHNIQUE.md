@@ -566,3 +566,17 @@ Gate the hover rules so touch devices never get stuck in a hover state:
 ```
 
 `prefers-reduced-motion` is safe to implement as a flat `animation: none` **only because of gate 2** — the rest state is declared in a base rule, so removing the animation leaves the correct picture.
+
+---
+
+## Reduced motion
+
+A hover gesture is decorative by definition — the icon means the same thing whether or not it performs. So the reduced-motion answer for this entire library is the flat gate above: `animation: none`, sit at rest. Gate 2 is what makes that a one-liner instead of a per-icon audit; an icon whose rest lives only in its `0%` keyframe breaks the moment the animation is removed (failure #2).
+
+Three cases are not covered by the flat gate:
+
+- **Icon-swap (family 12) is a state change, not decoration.** The menu must still become a cross or the user is lost. Under reduce, keep the swap but make it instant — set the target coordinates with no tween. Never leave the old glyph on screen.
+- **A spinner that means "loading" is essential motion** and may keep spinning; that information has no still equivalent. Slow it before killing it.
+- **The JS driver must not re-add what CSS removed.** The driver waits on `animation.finished`; with `animation: none` there are no animations, and the existing `if (!running.length) return` branch already exits cleanly. Keep that branch when adapting the driver.
+
+Test it live: toggle emulation in DevTools > Rendering > "Emulate CSS media feature prefers-reduced-motion" with the page open, and hover — the icon must sit still and look exactly like rest.

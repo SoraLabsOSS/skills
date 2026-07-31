@@ -198,6 +198,7 @@ Every animated icon honours `prefers-reduced-motion: reduce` by dropping to `ani
 ## Reference
 
 - **`FAMILIES.md`** — the gesture catalog. Start here for any new icon.
+- **`EXAMPLES.md`** — four golden examples worked end-to-end (hinge bell, travel-and-return send, sequenced draw-on, three-line icon-swap with real coordinates): every number annotated with where it came from. Copy the shape, derive your own numbers.
 - **`MORPH.md`** — the vector-morph technique: authoring two paths, matching command structure, **correspondence (which point becomes which, and why arc length is not it)**, recovering geometry that is not in the file, and when NOT to morph. Read it before any hand-gesture or shape-change icon.
 - **`ICON-MORPH.md`** — icon-to-icon morphing: the three-line system where every icon is exactly three SVG lines (extras collapsed to invisible center points), rotation groups for same-shape icons, coordinate tweening for everything else. Read it when icons swap into each other's place rather than gesturing.
 - **`TECHNIQUE.md`** — SVG/CSS mechanics, the failure catalog, the playback driver, units.
