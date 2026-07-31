@@ -30,6 +30,7 @@ Set `pathLength="1"` on the path so the CSS talks in 0→1 instead of arc length
 **Rules**
 - **Never `linear`.** A pen leaves fast and eases into its stop; linear is a progress bar. This is the single most common failure in existing animated-icon libraries.
 - **Draw in the order a hand would.** Multi-part icons get sequenced strokes, not simultaneous ones: trunk down → loop the ring → back out along the branch → set the dot.
+- **A compound path draws all its subpaths at once.** Multiple `M` subpaths in one `d` share one dash pattern, so they all draw simultaneously. Split them into separate `<path>` elements with staggered delays to get the hand-drawn sequence.
 - Closed paths hide at `1.02`, not `1` (TECHNIQUE #8).
 - Where a stroke should drain *into* something rather than off its end, go toward `−1.02` instead.
 

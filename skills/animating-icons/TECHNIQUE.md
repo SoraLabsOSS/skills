@@ -434,6 +434,23 @@ When you must cut:
 
 ---
 
+## SVGO will undo this work
+
+An animated icon that passes every gate can be silently destroyed by the build pipeline: SVGO's default preset strips exactly the structure this technique depends on. If the set goes through SVGO, override these off:
+
+| Plugin | What it breaks |
+|---|---|
+| `cleanupIds` | renames the ids your `mask`/`clipPath` `url(#…)` references point at — the cut silently stops applying |
+| `mergePaths` | fuses the separately-animated parts back into one compound path |
+| `convertShapeToPath` | turns the unambiguous `<circle>` into an arc pair (§ Making parts — the r48-drawn-at-r79 bug, reintroduced by tooling) |
+| `removeHiddenElems` | deletes parked animation content that is legitimately invisible at rest |
+| `inlineStyles` | erases the class hooks the keyframes target |
+| `removeViewBox` | breaks the user-unit scaling that makes one keyframe set serve every size |
+
+`prefixIds` at build time is the static cousin of the per-instance `useId` fix (failure #6) — use it when many icons are inlined into one document.
+
+---
+
 ## Sleight of hand
 
 Three shipped gestures use the same trick: **do the impossible bit where nobody is looking.**
