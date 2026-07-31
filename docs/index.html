@@ -423,8 +423,64 @@
         }
       }
 
+      /* Nút copy chìm dạng Icon tối giản */
+      .copy-btn {
+        position: absolute;
+        top: 0.55rem;
+        right: 0.55rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        padding: 0;
+        color: rgba(0, 0, 0, 0.4);
+        background: transparent;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        opacity: 0;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .install:hover .copy-btn,
+      .prompt:hover .copy-btn {
+        opacity: 0.7;
+      }
+
+      .copy-btn:hover {
+        opacity: 1 !important;
+        color: var(--body-color);
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+      .copy-btn svg {
+        width: 14px;
+        height: 14px;
+        pointer-events: none;
+      }
+
+      .copy-btn .icon-check {
+        display: none;
+        color: #10b981;
+      }
+
+      .copy-btn.copied {
+        opacity: 1 !important;
+        background: rgba(16, 185, 129, 0.08);
+      }
+
+      .copy-btn.copied .icon-copy {
+        display: none;
+      }
+
+      .copy-btn.copied .icon-check {
+        display: block;
+      }
+
       /* install blocks */
       .install {
+        position: relative;
         margin-top: 1rem;
         background: #f7f7f6;
         border: 1px solid var(--line);
@@ -442,9 +498,14 @@
 
       /* sample prompts */
       .prompt {
+        position: relative;
         margin-top: 1rem;
         padding: 0.35rem 0 0.35rem 1rem;
         border-left: 2px solid var(--accent);
+      }
+      .prompt .copy-btn {
+        top: 0.2rem;
+        right: 0;
       }
       .prompt .c {
         display: block;
@@ -650,13 +711,70 @@
           Drop it into any coding agent — Claude Code, Cursor, Codex, and more:
         </p>
         <div class="install">
+          <button class="copy-btn" aria-label="Copy code">
+            <svg
+              class="icon-copy"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <rect x="5.5" y="5.5" width="7" height="7" rx="1" />
+              <path
+                d="M3.5 10.5V4.5C3.5 3.94772 3.94772 3.5 4.5 3.5H10.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <svg
+              class="icon-check"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                d="M3.5 8.5L6.5 11.5L12.5 4.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
           <span class="c"># any agent</span><br />
-          npx skills add SoraLabsOSS/skills
+          <span class="cmd">npx skills add SoraLabsOSS/skills</span>
         </div>
         <div class="install">
+          <button class="copy-btn" aria-label="Copy code">
+            <svg
+              class="icon-copy"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <rect x="5.5" y="5.5" width="7" height="7" rx="1" />
+              <path
+                d="M3.5 10.5V4.5C3.5 3.94772 3.94772 3.5 4.5 3.5H10.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <svg
+              class="icon-check"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                d="M3.5 8.5L6.5 11.5L12.5 4.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
           <span class="c"># or as a Claude Code plugin</span><br />
-          /plugin marketplace add SoraLabsOSS/skills<br />
-          /plugin install animating-icons@soralabs
+          <span class="cmd">/plugin marketplace add SoraLabsOSS/skills</span
+          ><br />
+          <span class="cmd">/plugin install animating-icons@soralabs</span>
         </div>
 
         <h2>Prompts that hold the line</h2>
@@ -666,6 +784,34 @@
           decoration. Three we keep reaching for:
         </p>
         <div class="prompt">
+          <button class="copy-btn" aria-label="Copy prompt">
+            <svg
+              class="icon-copy"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <rect x="5.5" y="5.5" width="7" height="7" rx="1" />
+              <path
+                d="M3.5 10.5V4.5C3.5 3.94772 3.94772 3.5 4.5 3.5H10.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <svg
+              class="icon-check"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                d="M3.5 8.5L6.5 11.5L12.5 4.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
           <span class="c">The default prompt</span>
           <q
             >Here's the icon. Find the verb it already stands for, and animate
@@ -679,6 +825,34 @@
           >
         </div>
         <div class="prompt">
+          <button class="copy-btn" aria-label="Copy prompt">
+            <svg
+              class="icon-copy"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <rect x="5.5" y="5.5" width="7" height="7" rx="1" />
+              <path
+                d="M3.5 10.5V4.5C3.5 3.94772 3.94772 3.5 4.5 3.5H10.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <svg
+              class="icon-check"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                d="M3.5 8.5L6.5 11.5L12.5 4.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
           <span class="c">The reasoning-first prompt</span>
           <q
             >Before touching a single keyframe: name the verb this object
@@ -688,6 +862,34 @@
           >
         </div>
         <div class="prompt">
+          <button class="copy-btn" aria-label="Copy prompt">
+            <svg
+              class="icon-copy"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <rect x="5.5" y="5.5" width="7" height="7" rx="1" />
+              <path
+                d="M3.5 10.5V4.5C3.5 3.94772 3.94772 3.5 4.5 3.5H10.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <svg
+              class="icon-check"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                d="M3.5 8.5L6.5 11.5L12.5 4.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
           <span class="c">The gatekeeping prompt</span>
           <q
             >Stop before animating: does this icon contain a real gesture, or is
@@ -849,6 +1051,33 @@
         const from = ORDER[idx];
         idx = (idx + 1) % ORDER.length;
         go(from, ORDER[idx]);
+      });
+
+      // Subtle Icon Copy functionality
+      document.querySelectorAll(".copy-btn").forEach((copyBtn) => {
+        copyBtn.addEventListener("click", () => {
+          const parent = copyBtn.parentElement;
+          let textToCopy = "";
+
+          if (parent.classList.contains("install")) {
+            const cmds = parent.querySelectorAll(".cmd");
+            textToCopy = Array.from(cmds)
+              .map((c) => c.textContent.trim())
+              .join("\n");
+          } else if (parent.classList.contains("prompt")) {
+            const q = parent.querySelector("q");
+            textToCopy = q ? q.textContent.trim() : "";
+          }
+
+          if (textToCopy) {
+            navigator.clipboard.writeText(textToCopy).then(() => {
+              copyBtn.classList.add("copied");
+              setTimeout(() => {
+                copyBtn.classList.remove("copied");
+              }, 1500);
+            });
+          }
+        });
       });
     </script>
   </body>
