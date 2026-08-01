@@ -1,0 +1,223 @@
+/* Interactive stage — equal tabs, precise pill, quiet chrome */
+
+.mm-stage {
+  position: relative;
+  margin: 1.75rem 0 0.25rem;
+  padding: 0;
+}
+
+.mm-demo {
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem 0 1.5rem;
+}
+
+.mm-tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(4.75rem, 1fr));
+  width: fit-content;
+  max-width: 100%;
+  padding: 3px;
+  border-radius: 999px;
+  background: #f2f2f0;
+}
+
+.mm-pill {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  height: calc(100% - 6px);
+  border-radius: 999px;
+  background: #111;
+  z-index: 0;
+  pointer-events: none;
+  will-change: left, width;
+}
+
+.mm-tabs button {
+  position: relative;
+  z-index: 1;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: -0.01rem;
+  line-height: 1.25rem;
+  color: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  border-radius: 999px;
+  text-align: center;
+  transition: color 0.15s ease;
+}
+
+.mm-tabs button[aria-selected="true"] {
+  color: #fff;
+}
+
+.mm-tabs button:hover:not([aria-selected="true"]) {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.mm-tabs button:focus-visible {
+  outline: 2px solid rgba(0, 122, 255, 0.45);
+  outline-offset: 2px;
+}
+
+.mm-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+}
+
+.mm-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 460;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.45);
+  letter-spacing: -0.00563rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mm-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.mm-switch {
+  position: relative;
+  display: block;
+  width: 1.625rem;
+  height: 0.9375rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.12);
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.mm-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 0.6875rem;
+  height: 0.6875rem;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
+  transition: transform 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.mm-toggle input:checked + .mm-switch {
+  background: #111;
+}
+
+.mm-toggle input:checked + .mm-switch::after {
+  transform: translateX(0.6875rem);
+}
+
+.mm-toggle input:focus-visible + .mm-switch {
+  outline: 2px solid rgba(0, 122, 255, 0.45);
+  outline-offset: 2px;
+}
+
+.mm-toggle input:disabled + .mm-switch {
+  opacity: 0.5;
+}
+
+.mm-toggle:has(input:disabled) {
+  cursor: not-allowed;
+  color: rgba(0, 0, 0, 0.32);
+}
+
+.mm-status {
+  margin: 0.65rem 0 0;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 460;
+  letter-spacing: -0.0025rem;
+  line-height: 1.2;
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.mm-hint {
+  margin: 0.85rem 0 0;
+  text-align: center;
+  font-family: var(--font-script);
+  font-size: 1.375rem;
+  font-weight: 500;
+  line-height: 95%;
+  letter-spacing: -0.0025rem;
+  color: #4a4a4a;
+  user-select: none;
+}
+
+.mm-table {
+  width: 100%;
+  margin: 1.25rem 0 0;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  font-weight: 460;
+  letter-spacing: -0.00563rem;
+  line-height: 1.25rem;
+}
+
+.mm-table th,
+.mm-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.55rem 0.5rem 0.55rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.mm-table th {
+  color: rgba(0, 0, 0, 0.4);
+  font-weight: 500;
+}
+
+.mm-table td:first-child {
+  color: #111;
+  font-weight: 560;
+  white-space: nowrap;
+  padding-right: 0.75rem;
+}
+
+.mm-table td:last-child {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+@media (max-width: 520px) {
+  .mm-demo {
+    padding: 2rem 0 1.25rem;
+  }
+  .mm-tabs {
+    grid-template-columns: repeat(3, minmax(4rem, 1fr));
+  }
+  .mm-tabs button {
+    padding: 0.45rem 0.5rem;
+  }
+  .mm-table td:first-child {
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mm-pill,
+  .mm-switch::after {
+    transition: none !important;
+  }
+}

@@ -20,11 +20,11 @@ An icon is not a picture you move. It is an object that **does something**, and 
 
 Twelve gesture families, a failure catalog, vector morph + icon↔icon morph, and a verify harness that measures instead of eyeballing.
 
-|                  |                                                                    |
-| ---------------- | ------------------------------------------------------------------ |
-| Site             | [skills.soralabs.io.vn](https://skills.soralabs.io.vn/)            |
-| Icons in product | [Sora UI Icons](https://ui.soralabs.io.vn/docs/icons)              |
-| Verify           | `node skills/animating-icons/scripts/verify-icon.mjs` · `npm test` |
+|                  |                                                                                         |
+| ---------------- | --------------------------------------------------------------------------------------- |
+| Site             | [skills.soralabs.io.vn/animating-icons](https://skills.soralabs.io.vn/animating-icons/) |
+| Icons in product | [Sora UI Icons](https://ui.soralabs.io.vn/docs/icons)                                   |
+| Verify           | `node skills/animating-icons/scripts/verify-icon.mjs` · `npm test`                      |
 
 ### [motion-meaning](./skills/motion-meaning/SKILL.md)
 
@@ -35,6 +35,7 @@ Classify motion as communicative (sequence = content) or decorative (decorating 
 |             |                                                                                                |
 | ----------- | ---------------------------------------------------------------------------------------------- |
 | Blog origin | [prefers-reduced-motion in React](https://ui.soralabs.io.vn/blog/prefers-reduced-motion-react) |
+| Site        | [skills.soralabs.io.vn/motion-meaning](https://skills.soralabs.io.vn/motion-meaning/)          |
 | Verify      | `node skills/motion-meaning/scripts/verify-reduced.mjs` · `npm run test:motion-meaning`        |
 
 ## Install
@@ -98,7 +99,7 @@ site/                  # Vite landing (skills.soralabs.io.vn)
 AGENTS.md              # Notes for agents editing skills in this repo
 ```
 
-Landing: edit `site/`, push to `main` — Actions builds and deploys to GitHub Pages. Locally use `npm run docs:dev` / `docs:build` / `docs:preview`. Domain: `skills.soralabs.io.vn`.
+Landing: edit `site/`, push to `main` — Actions builds with Bun and deploys to GitHub Pages. Home `/` · `/animating-icons/` · `/motion-meaning/`. Locally: `bun run docs:dev` / `docs:build` / `docs:preview`. Domain: `skills.soralabs.io.vn`.
 
 ## Credit
 

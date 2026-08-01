@@ -1,7 +1,7 @@
 {
   "name": "animating-icons",
   "version": "1.3.1",
-  "description": "A method for animating SVG icons so each gesture is the icon's own meaning acting on itself. A Claude Code skill.",
+  "description": "Agent skills for motion craft from SoraLabs — animating-icons (SVG gestures) and motion-meaning (prefers-reduced-motion so meaning survives).",
   "type": "module",
   "bin": {
     "animating-icons": "bin/install.mjs"
@@ -15,10 +15,13 @@
   "keywords": [
     "claude-code",
     "claude-skill",
+    "agent-skills",
     "icons",
     "svg",
     "animation",
     "motion",
+    "prefers-reduced-motion",
+    "accessibility",
     "phosphor",
     "lucide",
     "hugeicons"
@@ -36,8 +39,8 @@
   "scripts": {
     "test": "node skills/animating-icons/scripts/smoke.mjs",
     "test:motion-meaning": "node skills/motion-meaning/scripts/smoke.mjs",
-    "docs:dev": "npm run dev --prefix site",
-    "docs:build": "npm run build --prefix site",
-    "docs:preview": "npm run preview --prefix site"
+    "docs:dev": "bun run --cwd site dev",
+    "docs:build": "bun run --cwd site build",
+    "docs:preview": "bun run --cwd site preview"
   }
 }
