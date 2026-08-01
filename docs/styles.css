@@ -486,3 +486,108 @@ code {
 .foot a {
   color: rgba(0, 0, 0, 0.55);
 }
+
+.skill-bunny {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin: -0.35em 0 0 0;
+  vertical-align: middle;
+  overflow: visible;
+  color: rgba(0, 0, 0, 0.45);
+}
+.skill-bunny-ear-l,
+.skill-bunny-ear-r {
+  transform-origin: bottom center;
+  transform-box: fill-box;
+}
+.skill-bunny-ear-l {
+  animation: skillBunnyEarL 4s ease-in-out infinite;
+}
+.skill-bunny-ear-r {
+  animation: skillBunnyEarR 4s ease-in-out infinite;
+}
+.skill-bunny-z1 {
+  animation: skillBunnyZ1 3s ease-out 0s infinite both;
+}
+.skill-bunny-z2 {
+  animation: skillBunnyZ2 3s ease-out 1s infinite both;
+}
+.skill-bunny-z3 {
+  animation: skillBunnyZ3 3s ease-out 2s infinite both;
+}
+@keyframes skillBunnyEarL {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+@keyframes skillBunnyEarR {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+}
+@keyframes skillBunnyZ1 {
+  0% {
+    transform: translate(0, 0) scale(0.7);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(4px, -14px) scale(1);
+    opacity: 0;
+  }
+}
+@keyframes skillBunnyZ2 {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(6px, -16px) scale(0.9);
+    opacity: 0;
+  }
+}
+@keyframes skillBunnyZ3 {
+  0% {
+    transform: translate(0, 0) scale(0.5);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(8px, -18px) scale(0.8);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skill-bunny-ear-l,
+  .skill-bunny-ear-r,
+  .skill-bunny-z1,
+  .skill-bunny-z2,
+  .skill-bunny-z3 {
+    animation: none;
+  }
+}
