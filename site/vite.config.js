@@ -1,10 +1,10 @@
 import { defineConfig } from "vite";
 
-/** Build into ../docs so GitHub Pages (branch main, /docs) keeps working. */
+/** Output to site/dist — GitHub Actions uploads this to Pages. */
 export default defineConfig({
   base: "/",
   build: {
-    outDir: "../docs",
+    outDir: "dist",
     emptyOutDir: true,
     assetsDir: "assets",
   },

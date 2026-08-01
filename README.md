@@ -20,11 +20,11 @@ An icon is not a picture you move. It is an object that **does something**, and 
 
 Twelve gesture families, a failure catalog, vector morph + icon↔icon morph, and a verify harness that measures instead of eyeballing.
 
-|                  |                                                                           |
-| ---------------- | ------------------------------------------------------------------------- |
-| Site             | [skills.soralabs.io.vn](https://skills.soralabs.io.vn/) |
-| Icons in product | [Sora UI Icons](https://ui.soralabs.io.vn/docs/icons)                     |
-| Verify           | `node skills/animating-icons/scripts/verify-icon.mjs` · `npm test`        |
+|                  |                                                                    |
+| ---------------- | ------------------------------------------------------------------ |
+| Site             | [skills.soralabs.io.vn](https://skills.soralabs.io.vn/)            |
+| Icons in product | [Sora UI Icons](https://ui.soralabs.io.vn/docs/icons)              |
+| Verify           | `node skills/animating-icons/scripts/verify-icon.mjs` · `npm test` |
 
 ### [motion-meaning](./skills/motion-meaning/SKILL.md)
 
@@ -93,12 +93,12 @@ Skills fire when the task matches their description. You can also invoke by name
 skills/
   animating-icons/     # SVG icon gestures + morph + verify
   motion-meaning/      # role → strategy → meaning under reduce
-docs/                  # Landing site (Vite build output → GitHub Pages /docs)
-site/                  # Vite source for the landing (`npm run docs:dev`)
+site/                  # Vite landing (skills.soralabs.io.vn)
+.github/workflows/     # Pages deploy on push to site/
 AGENTS.md              # Notes for agents editing skills in this repo
 ```
 
-Landing site: edit files under `site/`, then `npm run docs:build` to refresh `docs/` (GitHub Pages serves `/docs` from `main`). Custom domain: `skills.soralabs.io.vn`.
+Landing: edit `site/`, push to `main` — Actions builds and deploys to GitHub Pages. Locally use `npm run docs:dev` / `docs:build` / `docs:preview`. Domain: `skills.soralabs.io.vn`.
 
 ## Credit
 

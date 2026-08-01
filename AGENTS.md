@@ -82,8 +82,8 @@ npx skills-ref validate ./skills/motion-meaning
 | [`skills/motion-meaning/SKILL.md`](skills/motion-meaning/SKILL.md)         | Reduced-motion role → strategy → meaning under reduce       |
 | [`skills/motion-meaning/references/`](skills/motion-meaning/references/)   | Classify, strategies, audit, patterns, failures, verify     |
 | [`skills/motion-meaning/scripts/`](skills/motion-meaning/scripts/)         | Dual-state verify harness (`verify-reduced.mjs`)            |
-| [`docs/`](docs/)                                                           | GitHub Pages output (`npm run docs:build` from `site/`)         |
-| [`site/`](site/)                                                           | Vite source for the landing (domain: skills.soralabs.io.vn)     |
+| [`site/`](site/)                                                           | Vite landing — push deploys via Actions (skills.soralabs.io.vn)  |
+| [`.github/workflows/deploy-site.yml`](.github/workflows/deploy-site.yml)   | Build `site/` → GitHub Pages                                    |
 
 **Implications for agents editing these skills:**
 
