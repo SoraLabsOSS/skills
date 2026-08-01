@@ -3,3 +3,5 @@ node_modules/
 .tmp-verify-test/
 .verify-out/
 verify-out/
+site/node_modules/
+site/dist/

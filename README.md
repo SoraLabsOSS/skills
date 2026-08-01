@@ -1,10 +1,10 @@
 # SoraLabs skills
 
-[![animating-icons](https://animating-icons.soralabs.io.vn/assets/og-image.png)](https://animating-icons.soralabs.io.vn/)
+[![animating-icons](https://skills.soralabs.io.vn/assets/og-image.png)](https://skills.soralabs.io.vn/)
 
 [![skills.sh](https://skills.sh/b/SoraLabsOSS/skills)](https://skills.sh/SoraLabsOSS/skills)
 ·
-[Website](https://animating-icons.soralabs.io.vn/)
+[Website](https://skills.soralabs.io.vn/)
 ·
 [Sora UI](https://ui.soralabs.io.vn/)
 
@@ -22,7 +22,7 @@ Twelve gesture families, a failure catalog, vector morph + icon↔icon morph, an
 
 |                  |                                                                           |
 | ---------------- | ------------------------------------------------------------------------- |
-| Site             | [animating-icons.soralabs.io.vn](https://animating-icons.soralabs.io.vn/) |
+| Site             | [skills.soralabs.io.vn](https://skills.soralabs.io.vn/) |
 | Icons in product | [Sora UI Icons](https://ui.soralabs.io.vn/docs/icons)                     |
 | Verify           | `node skills/animating-icons/scripts/verify-icon.mjs` · `npm test`        |
 
@@ -93,9 +93,12 @@ Skills fire when the task matches their description. You can also invoke by name
 skills/
   animating-icons/     # SVG icon gestures + morph + verify
   motion-meaning/      # role → strategy → meaning under reduce
-docs/                  # Landing site (animating-icons today)
+docs/                  # Landing site (Vite build output → GitHub Pages /docs)
+site/                  # Vite source for the landing (`npm run docs:dev`)
 AGENTS.md              # Notes for agents editing skills in this repo
 ```
+
+Landing site: edit files under `site/`, then `npm run docs:build` to refresh `docs/` (GitHub Pages serves `/docs` from `main`). Custom domain: `skills.soralabs.io.vn`.
 
 ## Credit
 

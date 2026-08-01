@@ -1,3 +1,5 @@
+import "./styles.css";
+
 // Three-line icon set — real coordinates in a 14×14 box centred on (7,7).
 // A line with x1===x2 && y1===y2 is a collapsed (invisible) slot.
 const ICONS = {
@@ -66,9 +68,11 @@ function paint(coords, deg) {
 
 paint(cur, 0);
 
-const prefersReduce = window.matchMedia(
-  "(prefers-reduced-motion: reduce)",
-).matches;
+const reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+let prefersReduce = reduceMq.matches;
+reduceMq.addEventListener("change", (e) => {
+  prefersReduce = e.matches;
+});
 
 function go(fromName, toName) {
   const from = ICONS[fromName],

@@ -35,6 +35,9 @@
   },
   "scripts": {
     "test": "node skills/animating-icons/scripts/smoke.mjs",
-    "test:motion-meaning": "node skills/motion-meaning/scripts/smoke.mjs"
+    "test:motion-meaning": "node skills/motion-meaning/scripts/smoke.mjs",
+    "docs:dev": "npm run dev --prefix site",
+    "docs:build": "npm run build --prefix site",
+    "docs:preview": "npm run preview --prefix site"
   }
 }
