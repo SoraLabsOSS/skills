@@ -1,4 +1,11 @@
 import "./styles.css";
+import { mountBell } from "./bell.js";
+import { mountChat } from "./chat.js";
+import { mountCalendar } from "./calendar.js";
+
+mountBell(document.getElementById("bell-demo"));
+mountChat(document.getElementById("chat-demo"));
+mountCalendar(document.getElementById("calendar-demo"));
 
 // Three-line icon set — real coordinates in a 14×14 box centred on (7,7).
 // A line with x1===x2 && y1===y2 is a collapsed (invisible) slot.
