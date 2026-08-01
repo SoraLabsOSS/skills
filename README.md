@@ -58,21 +58,22 @@ Prompts that work well with it:
 
 Layout follows the [Agent Skills](https://agentskills.io/specification) progressive-disclosure model: lean `SKILL.md`, details in `references/`, helpers in `scripts/`.
 
-| Path                       |                                                                                                        |
-| -------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `SKILL.md`                 | Principle, swap test, four gates, landing on rest, mechanism choice, procedure, budget, Done checklist |
-| `references/FAMILIES.md`   | Twelve gesture families + verb→family lookup                                                           |
-| `references/EXAMPLES.md`   | Four golden examples — every number annotated with where it came from                                  |
-| `references/FAILURES.md`   | Seventeen failure modes (read before authoring)                                                        |
-| `references/TECHNIQUE.md`  | Units, driver, clearance, SVGO, clocks                                                                 |
-| `references/EASING.md`     | House curves, peak slope, physics fit                                                                  |
-| `references/FILL.md`       | Fill-weight (Phosphor-style) material rules                                                            |
-| `references/MORPH.md`      | Vector morph + correspondence                                                                          |
-| `references/ICON-MORPH.md` | Three-line icon↔icon morph system                                                                      |
-| `references/VERIFY.md`     | Frame strips, difference overlays, motion matrix                                                       |
-| `scripts/verify-icon.mjs`  | One-command rest + seek capture + `ig-*` assert                                                        |
-| `scripts/seek-shot.sh`     | Freeze `?t=N` and screenshot                                                                           |
-| `scripts/contact-sheet.sh` | Tile frames into one image                                                                             |
+| Path                        |                                                                                                        |
+| --------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `SKILL.md`                  | Principle, swap test, four gates, landing on rest, mechanism choice, procedure, budget, Done checklist |
+| `references/FAMILIES.md`    | Twelve gesture families + verb→family lookup                                                           |
+| `references/EXAMPLES.md`    | Four golden examples — every number annotated with where it came from                                  |
+| `references/FAILURES.md`    | Seventeen failure modes (read before authoring)                                                        |
+| `references/TECHNIQUE.md`   | Units, driver, clearance, SVGO, clocks                                                                 |
+| `references/EASING.md`      | House curves, peak slope, physics fit                                                                  |
+| `references/FILL.md`        | Fill-weight (Phosphor-style) material rules                                                            |
+| `references/MORPH.md`       | Vector morph + correspondence                                                                          |
+| `references/ICON-MORPH.md`  | Three-line icon↔icon morph system                                                                      |
+| `references/VERIFY.md`      | Frame strips, difference overlays, motion matrix                                                       |
+| `scripts/verify-icon.mjs`   | Default verify: rest + seek + `ig-*` assert + contact sheet (Node, all OS)                             |
+| `scripts/seek-shot.mjs`     | Freeze `?t=N` and screenshot                                                                           |
+| `scripts/contact-sheet.mjs` | Tile frames (needs ffmpeg on PATH)                                                                     |
+| `scripts/*.sh`              | Thin bash wrappers around the `.mjs` files                                                             |
 
 ## The parts I would read first
 
@@ -84,6 +85,6 @@ Layout follows the [Agent Skills](https://agentskills.io/specification) progress
 
 ## Credit
 
-The morphing technique came from [Benji Taylor's article](https://benji.org/morphing-icons-with-claude). The timing instincts are [Emil Kowalski's](https://animations.dev) — his course is the thing to read on motion. The `seek-shot`/`contact-sheet` verify scripts are adapted from [iart-ai/web-animation-skills](https://github.com/iart-ai/web-animation-skills) (MIT). Built by the team behind [Sora UI](https://ui.soralabs.io.vn/docs/icons).
+The morphing technique came from [Benji Taylor's article](https://benji.org/morphing-icons-with-claude). The timing instincts are [Emil Kowalski's](https://animations.dev) — his course is the thing to read on motion. Verify helpers are adapted from [iart-ai/web-animation-skills](https://github.com/iart-ai/web-animation-skills) (MIT), ported to cross-platform Node. Built by the team behind [Sora UI](https://ui.soralabs.io.vn/docs/icons).
 
 MIT.

@@ -186,13 +186,13 @@ Run this after authoring. It does not claim a full gate pass — it captures res
 node scripts/verify-icon.mjs path/to/icon.html --dur 0.9
 ```
 
-Needs: Node 18+, Playwright (`npx` fetches Chromium on first run). Optional: ffmpeg for the contact sheet.
+Needs: Node 18+. First run installs Playwright into `~/.cache/animating-icons-verify` (Chromium included). Contact sheet prefers ffmpeg on PATH, otherwise tiles via that same Playwright cache. This is the **default** verify entrypoint on Windows, macOS, and Linux — no bash required.
 
 The gates that still need agent eyes, in order: **source vs rest** (px > 8 after the corner-AA allowance), **frame 0 vs final** (0 or noise-floor), the **paused strip / sheet** read at 3×, **motion matrix** (gate 4), and a **live hover run** (dispatch pointerover, wait for the driver to clear `data-go`, diff before/after — must be 0).
 
 ## The `?t=N` seek harness
 
-Bake a seek hook into the test page: `?t=N` starts the gesture through the real trigger, then pauses every animation at `t` seconds, so a headless screenshot lands on a deterministic still. `verify-icon.mjs` and `seek-shot.sh` both drive this hook.
+Bake a seek hook into the test page: `?t=N` starts the gesture through the real trigger, then pauses every animation at `t` seconds, so a headless screenshot lands on a deterministic still. `verify-icon.mjs` and `seek-shot.mjs` both drive this hook.
 
 ```html
 <script>
@@ -219,11 +219,11 @@ Bake a seek hook into the test page: `?t=N` starts the gesture through the real 
 
 Assert the animation count before trusting the frame (§ A probe that returns 0), and remember a paused animation keeps applying its effect — capture rest on a clean load with no `?t` at all, never by un-pausing.
 
-Lower-level helpers (adapted from `iart-ai/web-animation-skills`, MIT):
+Lower-level helpers when you only need one step (same Node scripts; `.sh` files are thin wrappers):
 
 ```bash
-scripts/seek-shot.sh icon.html 0 0.4 0.8       # frozen screenshots at those times
-scripts/contact-sheet.sh sheet.png frame-*.png  # tile start | mid | end into one image
+node scripts/seek-shot.mjs icon.html 0 0.4 0.8
+node scripts/contact-sheet.mjs sheet.png frame-0.png frame-0.4.png frame-0.8.png
 ```
 
 Then **Read the sheet** — one image seen whole is how a dead segment or an adjacent-frame jump actually gets noticed.
@@ -245,7 +245,7 @@ The second sweep is a **cross-family** sheet: one icon from each family, side by
 ## Before shipping an icon
 
 - [ ] Which of the four landing strategies this gesture uses, named out loud ([SKILL.md](../SKILL.md) § Landing on rest)
-- [ ] `scripts/verify-icon.mjs` (or seek-shot + contact-sheet) run; sheet Read
+- [ ] `node scripts/verify-icon.mjs` run; sheet Read
 - [ ] Noise floor known (no-op animation vs detached rest), and rest captured first on a clean load
 - [ ] Every probe that returned 0 shown capable of returning non-zero
 - [ ] Difference overlay clean at frame 0 **and** the final frame

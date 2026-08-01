@@ -7,11 +7,13 @@ description: >-
   transform-box. Not for page transitions, Lottie, or general UI chrome motion.
 license: MIT
 compatibility: >-
-  Verification screenshots need Node 18+ and Playwright (npx). Hover gestures
-  are CSS keyframes; icon-swap family may use Motion.
+  Verify with Node 18+; first run installs Playwright into
+  ~/.cache/animating-icons-verify. Contact sheets use ffmpeg if present,
+  else Playwright. Default: node scripts/verify-icon.mjs (all OS). Hover
+  gestures are CSS keyframes; icon-swap may use Motion.
 metadata:
   author: SoraLabs
-  version: "1.3.0"
+  version: "1.3.1"
 ---
 
 # Animating Icons

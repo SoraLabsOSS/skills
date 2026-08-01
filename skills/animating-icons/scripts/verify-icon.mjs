@@ -10,20 +10,70 @@
  * Usage:
  *   node scripts/verify-icon.mjs path/to/icon.html [--dur 0.9] [--out ./verify-out]
  *
- * Needs: Node 18+, Playwright (`npx playwright install chromium` once).
- * Optional: ffmpeg (for contact-sheet tiling via scripts/contact-sheet.sh).
+ * Needs: Node 18+. First run installs Playwright into ~/.cache/animating-icons-verify.
+ * Prefers ffmpeg on PATH; falls back to Playwright tile if ffmpeg is missing.
  *
  * The HTML page should implement the ?t=N seek hook from references/VERIFY.md:
  * set data-go, pause ig-* animations at t seconds, set window.__ready = true.
+ *
+ * Default verify entrypoint for all platforms. Prefer this over the .sh helpers.
  */
 
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const skillRoot = resolve(here, "..");
+
+/** Persistent Playwright install so `require("playwright")` works (npx -p does not). */
+function ensurePlaywright() {
+  const cache = join(homedir(), ".cache", "animating-icons-verify");
+  const pkg = join(cache, "node_modules", "playwright", "package.json");
+  mkdirSync(cache, { recursive: true });
+  if (!existsSync(join(cache, "package.json"))) {
+    writeFileSync(
+      join(cache, "package.json"),
+      JSON.stringify({ private: true, name: "animating-icons-verify-cache" }),
+    );
+  }
+  if (!existsSync(pkg)) {
+    console.log(
+      "  installing playwright into ~/.cache/animating-icons-verify …",
+    );
+    const inst = spawnSync(
+      "npm",
+      ["install", "playwright@1", "--no-fund", "--no-audit", "--no-progress"],
+      { cwd: cache, encoding: "utf8", shell: true },
+    );
+    if (inst.status !== 0 || !existsSync(pkg)) {
+      return {
+        ok: false,
+        error: (
+          inst.stderr ||
+          inst.stdout ||
+          "npm install playwright failed"
+        ).trim(),
+      };
+    }
+  }
+  const install = spawnSync(
+    process.execPath,
+    [
+      join(cache, "node_modules", "playwright", "cli.js"),
+      "install",
+      "chromium",
+    ],
+    { encoding: "utf8", shell: true },
+  );
+  // install may already be present; ignore non-zero if browsers exist
+  return {
+    ok: true,
+    nodePath: join(cache, "node_modules"),
+    installLog: (install.stderr || install.stdout || "").trim(),
+  };
+}
 
 function usage(code = 1) {
   console.error(
@@ -128,14 +178,16 @@ console.log(`  verifying ${htmlPath}`);
 console.log(`  out → ${outDir}`);
 console.log(`  times → ${times.join(", ")}s`);
 
-const nodeRun = spawnSync(
-  "npx",
-  ["-y", "-p", "playwright", "node", runnerPath],
-  {
+const pw = ensurePlaywright();
+let nodeRun = { status: 1, stdout: "", stderr: pw.ok ? "" : pw.error };
+if (pw.ok) {
+  nodeRun = spawnSync(process.execPath, [runnerPath], {
     encoding: "utf8",
-    shell: true,
-  },
-);
+    env: { ...process.env, NODE_PATH: pw.nodePath },
+  });
+} else {
+  console.error("  ✗ could not install playwright:", pw.error);
+}
 
 function captureWithCli() {
   console.warn(
@@ -181,7 +233,8 @@ function captureWithCli() {
 }
 
 if (nodeRun.status !== 0) {
-  console.error((nodeRun.stderr || nodeRun.stdout || "").trim());
+  const err = (nodeRun.stderr || nodeRun.stdout || "").trim();
+  if (err) console.error(err);
   captureWithCli();
 } else {
   let meta = null;
@@ -216,16 +269,17 @@ const sheet = join(outDir, "sheet.png");
 const frames = times
   .map((t) => join(outDir, `frame-${t}.png`))
   .filter(existsSync);
-const contactSh = join(skillRoot, "scripts", "contact-sheet.sh");
-if (frames.length && existsSync(contactSh)) {
-  const tiled = spawnSync("bash", [contactSh, sheet, ...frames], {
+const contactJs = join(here, "contact-sheet.mjs");
+if (frames.length && existsSync(contactJs)) {
+  const tiled = spawnSync(process.execPath, [contactJs, sheet, ...frames], {
     encoding: "utf8",
   });
   if (tiled.status === 0) {
-    console.log(`  sheet → ${sheet}`);
+    const line = (tiled.stdout || "").trimEnd() || `  sheet → ${sheet}`;
+    console.log(line.startsWith(" ") ? line : `  ${line}`);
   } else {
     console.warn(
-      "  ! contact-sheet skipped (need bash + ffmpeg):",
+      "  ! contact-sheet skipped (need ffmpeg on PATH):",
       (tiled.stderr || tiled.stdout || "").trim() || "unknown error",
     );
     console.log("  frames:", frames.join("  "));
