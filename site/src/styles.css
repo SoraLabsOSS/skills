@@ -269,25 +269,28 @@ code {
   border-radius: 5px;
 }
 
-/* hover gesture showcase — Bell + Chat in a row */
+/* hover gesture showcase — Bell + Chat + Calendar */
 .gesture-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+  gap: 1.5rem;
   padding: 2.5rem 0 1.5rem;
+  width: 100%;
 }
 .gesture-cell {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
+  min-width: 0;
+  text-align: center;
 }
 .icon-gesture {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   width: 64px;
   height: 64px;
   padding: 0;
@@ -314,9 +317,35 @@ code {
 /* Calendar re-arm needs viewBox clipping — set on .cal-svg in calendar.js */
 .gesture-caption {
   margin: 0;
+  max-width: 100%;
   font-size: 0.8125rem;
   color: var(--muted);
   letter-spacing: 0.01em;
+  line-height: 1.25;
+  text-align: center;
+  text-wrap: balance;
+}
+@media screen and (max-width: 768px) {
+  .gesture-row {
+    gap: 0.75rem;
+    padding: 1.75rem 0 1rem;
+  }
+  .gesture-cell {
+    gap: 0.5rem;
+  }
+  .icon-gesture {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+  }
+  .icon-gesture svg {
+    width: 28px;
+    height: 28px;
+  }
+  .gesture-caption {
+    font-size: 0.625rem;
+    letter-spacing: 0;
+  }
 }
 
 /* demo stage — notation */

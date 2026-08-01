@@ -94,8 +94,6 @@ const CSS = `
 .ig-calendar .cal-svg {
   overflow: hidden;
   display: block;
-  width: 48px;
-  height: 48px;
 }
 `;
 
