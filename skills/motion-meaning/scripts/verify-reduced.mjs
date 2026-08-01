@@ -1,14 +1,17 @@
 #!/usr/bin/env node
 /**
- * verify-reduced.mjs — dual-state meaning checks for motion-meaning fixtures/pages.
+ * verify-reduced.mjs — dual-state meaning checks for bundled fixtures.
  *
- * Loads HTML under prefers-reduced-motion: no-preference and reduce, reads
- * window.__mm, and asserts contracts (bail / snap / collapse / complexity).
+ * SECURITY: By default only opens HTML under scripts/fixtures/ (shipped with
+ * this skill). Paths outside that directory are refused unless you pass
+ * --allow-any-html (trusted local pages only — never untrusted remote HTML).
+ * The runner reads a fixed, typed subset of window.__mm — never arbitrary
+ * page text — to limit third-party content flowing into the agent loop.
  *
  * Usage:
  *   node scripts/verify-reduced.mjs
- *   node scripts/verify-reduced.mjs path/to/page.html [--out ./verify-out]
- *   node scripts/verify-reduced.mjs --expect-fail path/to/dead-branch.html
+ *   node scripts/verify-reduced.mjs fixtures/dead-branch.html --expect-fail
+ *   node scripts/verify-reduced.mjs path/to/trusted.html --allow-any-html
  *
  * Needs: Node 18+. First run installs Playwright into ~/.cache/motion-meaning-verify
  * and Chromium (network). Production pages without window.__mm are not auto-asserted —
@@ -16,13 +19,26 @@
  */
 
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { dirname, join, resolve } from "node:path";
+import {
+  dirname,
+  isAbsolute,
+  join,
+  relative,
+  resolve,
+} from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const fixturesDir = join(here, "fixtures");
+const fixturesDir = resolve(here, "fixtures");
+
+const ALLOWED_CONTRACTS = new Set([
+  "decorative-bail",
+  "communicative-snap",
+  "collapse-transition",
+  "reduce-complexity",
+]);
 
 function ensurePlaywright() {
   const cache = join(homedir(), ".cache", "motion-meaning-verify");
@@ -67,10 +83,20 @@ function ensurePlaywright() {
   return { ok: true, nodePath: join(cache, "node_modules") };
 }
 
+function isUnderFixtures(absPath) {
+  const resolved = resolve(absPath);
+  const rel = relative(fixturesDir, resolved);
+  return Boolean(rel) && !rel.startsWith("..") && !isAbsolute(rel);
+}
+
 function usage(code = 1) {
   console.error(`Usage:
   node scripts/verify-reduced.mjs
-  node scripts/verify-reduced.mjs <page.html> [--out dir] [--expect-fail]`);
+  node scripts/verify-reduced.mjs <fixture.html> [--out dir] [--expect-fail]
+  node scripts/verify-reduced.mjs <page.html> --allow-any-html [--out dir]
+
+  Default: only HTML under scripts/fixtures/ (skill-shipped).
+  --allow-any-html  open a trusted local file outside fixtures (opt-in).`);
   process.exit(code);
 }
 
@@ -78,6 +104,7 @@ const args = process.argv.slice(2);
 if (args.includes("-h") || args.includes("--help")) usage(0);
 
 const expectFail = args.includes("--expect-fail");
+const allowAnyHtml = args.includes("--allow-any-html");
 let outDir = resolve(process.cwd(), "verify-out");
 const paths = [];
 for (let i = 0; i < args.length; i++) {
@@ -85,7 +112,7 @@ for (let i = 0; i < args.length; i++) {
     outDir = resolve(args[++i]);
     continue;
   }
-  if (args[i] === "--expect-fail") continue;
+  if (args[i] === "--expect-fail" || args[i] === "--allow-any-html") continue;
   if (!args[i].startsWith("-")) paths.push(resolve(args[i]));
 }
 
@@ -116,6 +143,13 @@ for (const t of targets) {
     console.error(`  ✗ file not found: ${t.path}`);
     process.exit(1);
   }
+  if (!allowAnyHtml && !isUnderFixtures(t.path)) {
+    console.error(
+      `  ✗ refused path outside scripts/fixtures/:\n    ${t.path}\n` +
+        `    Copy a fixture there, or pass --allow-any-html for a trusted local file.`,
+    );
+    process.exit(1);
+  }
 }
 
 mkdirSync(outDir, { recursive: true });
@@ -125,6 +159,8 @@ if (!pw.ok) {
   console.error("  ✗ could not install playwright:", pw.error);
   process.exit(1);
 }
+
+const allowedContractsJson = JSON.stringify([...ALLOWED_CONTRACTS]);
 
 const runner = `
 const { chromium } = require("playwright");
@@ -137,10 +173,14 @@ const targets = ${JSON.stringify(
   })),
 )};
 const outDir = ${JSON.stringify(outDir)};
+const ALLOWED = new Set(${allowedContractsJson});
 
 function check(mm, reducedEmulated) {
   if (!mm || !mm.contract) {
     return { ok: false, reason: "missing window.__mm.contract" };
+  }
+  if (!ALLOWED.has(mm.contract)) {
+    return { ok: false, reason: "unknown contract " + mm.contract };
   }
   if (mm.contract === "decorative-bail") {
     if (reducedEmulated) {
@@ -200,6 +240,24 @@ function check(mm, reducedEmulated) {
   return { ok: false, reason: "unknown contract " + mm.contract };
 }
 
+/** Typed probe only — never return arbitrary page DOM/text to the host. */
+function readMm() {
+  const o = window.__mm;
+  if (!o || typeof o !== "object") return null;
+  const contract = typeof o.contract === "string" ? o.contract : "";
+  return {
+    contract,
+    decorativeVisible: Boolean(o.decorativeVisible),
+    allEnded: Boolean(o.allEnded),
+    anyEnded: Boolean(o.anyEnded),
+    collapsed: Boolean(o.collapsed),
+    atTarget: Boolean(o.atTarget),
+    layerCount: Number(o.layerCount) || 0,
+    maxAllowedWhenReduced: Number(o.maxAllowedWhenReduced) || 1,
+    reduce: Boolean(o.reduce),
+  };
+}
+
 (async () => {
   const browser = await chromium.launch();
   const report = [];
@@ -220,7 +278,7 @@ function check(mm, reducedEmulated) {
           timeout: 4000,
         });
       } catch (_) {}
-      const mm = await page.evaluate(() => window.__mm || null);
+      const mm = await page.evaluate(readMm);
       const result = check(mm, reduced);
       const entry = {
         file: t.name,
@@ -229,7 +287,6 @@ function check(mm, reducedEmulated) {
         mm,
         ...result,
       };
-      // Under reduce only, expectFail means we want check to fail
       if (t.expectFail && reduced) {
         entry.ok = !result.ok;
         if (result.ok) {
@@ -263,6 +320,11 @@ writeFileSync(runnerPath, runner);
 
 console.log("  motion-meaning dual-state verify");
 console.log(`  out → ${outDir}`);
+if (allowAnyHtml) {
+  console.warn(
+    "  ! --allow-any-html: opening paths outside fixtures — use only trusted local HTML",
+  );
+}
 
 const nodeRun = spawnSync(process.execPath, [runnerPath], {
   encoding: "utf8",

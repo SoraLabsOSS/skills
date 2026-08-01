@@ -7,7 +7,7 @@
  */
 
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -75,6 +75,20 @@ try {
       join(work, "dead-raw"),
     ]);
     assert(r.status !== 0, "expected non-zero exit for unbroken dead-branch");
+  });
+
+  run("refuses HTML outside fixtures without --allow-any-html", () => {
+    const outsider = join(work, "outsider.html");
+    writeFileSync(
+      outsider,
+      "<!doctype html><script>window.__ready=true;window.__mm={contract:'decorative-bail',decorativeVisible:true}</script>",
+    );
+    const r = node([outsider, "--out", join(work, "refuse")]);
+    assert(r.status !== 0, "expected refuse outside fixtures");
+    assert(
+      /refused path outside/i.test(r.stderr || r.stdout || ""),
+      "expected refuse message",
+    );
   });
 } finally {
   rmSync(work, { recursive: true, force: true });

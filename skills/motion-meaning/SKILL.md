@@ -17,7 +17,7 @@ compatibility: >-
   node skills/motion-meaning/scripts/verify-reduced.mjs
 metadata:
   author: SoraLabs
-  version: "0.1.2"
+  version: "0.1.3"
 ---
 
 # Motion Meaning

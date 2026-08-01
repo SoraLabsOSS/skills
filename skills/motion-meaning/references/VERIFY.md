@@ -31,13 +31,15 @@ node skills/motion-meaning/scripts/verify-reduced.mjs
 node skills/motion-meaning/scripts/verify-reduced.mjs --expect-fail skills/motion-meaning/scripts/fixtures/dead-branch.html
 ```
 
-| Fixture                    | Contract (`window.__mm.contract`)                        |
-| -------------------------- | -------------------------------------------------------- |
-| `decorative-bail.html`     | `decorative-bail`                                        |
-| `communicative-snap.html`  | `communicative-snap`                                     |
-| `collapse-transition.html` | `collapse-transition`                                    |
-| `reduce-complexity.html`   | `reduce-complexity`                                      |
-| `dead-branch.html`         | `communicative-snap` (intentionally broken under reduce) |
+**Path policy (security):** only HTML under `scripts/fixtures/` is opened by default. Arbitrary paths are refused unless you pass `--allow-any-html` for a **trusted local** file. The runner reads a fixed typed subset of `window.__mm` (booleans / numbers / known contract ids) — not free-form page text.
+
+| Fixture | Contract (`window.__mm.contract`) |
+| ------- | --------------------------------- |
+| `decorative-bail.html` | `decorative-bail` |
+| `communicative-snap.html` | `communicative-snap` |
+| `collapse-transition.html` | `collapse-transition` |
+| `reduce-complexity.html` | `reduce-complexity` |
+| `dead-branch.html` | `communicative-snap` (intentionally broken under reduce) |
 
 First run installs Playwright + Chromium into `~/.cache/motion-meaning-verify` (needs network). On CI, preinstall browsers or set `PLAYWRIGHT_BROWSERS_PATH`. Missing Chromium is an environment failure, not a skill-structure failure.
 

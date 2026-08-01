@@ -24,7 +24,7 @@
       "name": "motion-meaning",
       "source": ".",
       "description": "Classify UI motion as communicative or decorative, then fix or apply prefers-reduced-motion so meaning survives under reduce. Four reduce strategies plus live preference, audit workflow, and dual-state verify harness.",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "category": "design",
       "tags": [
         "accessibility",
