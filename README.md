@@ -99,7 +99,7 @@ site/                  # Vite landing (skills.soralabs.io.vn)
 AGENTS.md              # Notes for agents editing skills in this repo
 ```
 
-Landing: edit `site/`, push to `main` — Actions builds with Bun and deploys to GitHub Pages. Home `/` · `/animating-icons/` · `/motion-meaning/`. Locally: `bun run docs:dev` / `docs:build` / `docs:preview`. Domain: `skills.soralabs.io.vn`.
+Landing: edit `site/`, push to `main` — Actions builds with Bun and deploys to GitHub Pages. Home `/` · `/animating-icons/` · `/motion-meaning/`. Locally: `bun run site:dev` / `site:build` / `site:preview`. Domain: `skills.soralabs.io.vn`.
 
 ## Credit
 

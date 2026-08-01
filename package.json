@@ -39,8 +39,8 @@
   "scripts": {
     "test": "node skills/animating-icons/scripts/smoke.mjs",
     "test:motion-meaning": "node skills/motion-meaning/scripts/smoke.mjs",
-    "docs:dev": "bun run --cwd site dev",
-    "docs:build": "bun run --cwd site build",
-    "docs:preview": "bun run --cwd site preview"
+    "site:dev": "bun run --cwd site dev",
+    "site:build": "bun run --cwd site build",
+    "site:preview": "bun run --cwd site preview"
   }
 }
