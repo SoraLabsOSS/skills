@@ -72,7 +72,8 @@ Layout follows the [Agent Skills](https://agentskills.io/specification) progress
 | `references/VERIFY.md`      | Frame strips, difference overlays, motion matrix                                                       |
 | `scripts/verify-icon.mjs`   | Default verify: rest + seek + `ig-*` assert + contact sheet (Node, all OS)                             |
 | `scripts/seek-shot.mjs`     | Freeze `?t=N` and screenshot                                                                           |
-| `scripts/contact-sheet.mjs` | Tile frames (needs ffmpeg on PATH)                                                                     |
+| `scripts/contact-sheet.mjs` | Tile frames (ffmpeg or Playwright fallback)                                                            |
+| `scripts/smoke.mjs`         | Smoke tests — run `npm test`                                                                           |
 | `scripts/*.sh`              | Thin bash wrappers around the `.mjs` files                                                             |
 
 ## The parts I would read first

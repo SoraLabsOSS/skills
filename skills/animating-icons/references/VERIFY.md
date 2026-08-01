@@ -188,6 +188,12 @@ node scripts/verify-icon.mjs path/to/icon.html --dur 0.9
 
 Needs: Node 18+. First run installs Playwright into `~/.cache/animating-icons-verify` (Chromium included). Contact sheet prefers ffmpeg on PATH, otherwise tiles via that same Playwright cache. This is the **default** verify entrypoint on Windows, macOS, and Linux — no bash required.
 
+Smoke the scripts after changes:
+
+```bash
+npm test
+```
+
 The gates that still need agent eyes, in order: **source vs rest** (px > 8 after the corner-AA allowance), **frame 0 vs final** (0 or noise-floor), the **paused strip / sheet** read at 3×, **motion matrix** (gate 4), and a **live hover run** (dispatch pointerover, wait for the driver to clear `data-go`, diff before/after — must be 0).
 
 ## The `?t=N` seek harness

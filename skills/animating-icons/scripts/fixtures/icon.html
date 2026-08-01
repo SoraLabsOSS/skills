@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>animating-icons smoke fixture</title>
+    <style>
+      .dot {
+        transform-box: view-box;
+        transform-origin: 12px 12px;
+      }
+      @media (hover: hover) and (pointer: fine) {
+        [data-go] .dot {
+          animation: ig-pulse 900ms both;
+        }
+      }
+      @keyframes ig-pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.25);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg
+      data-icon
+      id="icon"
+      viewBox="0 0 24 24"
+      width="96"
+      height="96"
+      fill="none"
+      stroke="#111"
+      stroke-width="1.5"
+    >
+      <circle class="dot" cx="12" cy="12" r="6" />
+    </svg>
+    <script>
+      const icon = document.getElementById("icon");
+      const t = new URLSearchParams(location.search).get("t");
+      if (t !== null) {
+        icon.setAttribute("data-go", "");
+        requestAnimationFrame(() => {
+          const anims = icon
+            .getAnimations({ subtree: true })
+            .filter((a) => a.animationName?.startsWith("ig-"));
+          console.assert(anims.length > 0, "no animations");
+          anims.forEach((a) => {
+            a.pause();
+            a.currentTime = parseFloat(t) * 1000;
+          });
+          window.__ready = true;
+        });
+      }
+    </script>
+  </body>
+</html>

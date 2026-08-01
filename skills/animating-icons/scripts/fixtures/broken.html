@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>broken fixture — no ig-* animation</title>
+  </head>
+  <body>
+    <svg
+      data-icon
+      id="icon"
+      viewBox="0 0 24 24"
+      width="96"
+      height="96"
+      fill="none"
+      stroke="#111"
+      stroke-width="1.5"
+    >
+      <circle cx="12" cy="12" r="6" />
+    </svg>
+    <script>
+      const icon = document.getElementById("icon");
+      const t = new URLSearchParams(location.search).get("t");
+      if (t !== null) {
+        icon.setAttribute("data-go", "");
+        requestAnimationFrame(() => {
+          window.__ready = true;
+        });
+      }
+    </script>
+  </body>
+</html>
