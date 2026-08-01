@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # seek-shot.sh — freeze the icon's animation at given times and screenshot each.
 #
-# Drives the harness page's `?t=N` hook (VERIFY.md § The ?t=N seek harness): the page starts
+# Drives the harness page's `?t=N` hook (references/VERIFY.md § The ?t=N seek harness): the page starts
 # the gesture, then pauses every animation at t seconds, so every shot lands on a
 # deterministic still frame.
 #

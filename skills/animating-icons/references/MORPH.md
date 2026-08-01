@@ -1,6 +1,6 @@
 # The vector morph
 
-The tool for the **Reshape** family (`FAMILIES.md` #11): when the shape itself changes and no transform can fake it. A book folds shut, a closed envelope opens into a tent, a hand curls into a sign. This is the one technique in the kit that is genuinely different, and it is the one people reach for too early. Read § When not to morph first.
+The tool for the **Reshape** family ([FAMILIES.md](FAMILIES.md) #11): when the shape itself changes and no transform can fake it. A book folds shut, a closed envelope opens into a tent, a hand curls into a sign. This is the one technique in the kit that is genuinely different, and it is the one people reach for too early. Read § When not to morph first.
 
 The core idea is small: author the path **twice**, once per pose, with the **same command structure** — same `M / C / L / Z` sequence, same number of points, only the coordinates differ — and animate the CSS `d` property between them. Chrome interpolates every point one-to-one, so a genuine transformation happens with zero opacity.
 
@@ -140,12 +140,12 @@ The mistake to avoid is reaching for a morph because it is the impressive techni
 | Something travels | `transform` |
 | Something is revealed or written | `stroke-dashoffset` |
 | Something goes behind / inside something | `clipPath` or mask |
-| A line opens to let something past | animated `stroke-dasharray` (TECHNIQUE § a gap that follows) |
+| A line opens to let something past | animated `stroke-dasharray` ([TECHNIQUE.md](TECHNIQUE.md) § a gap that follows) |
 | A flap hinges toward the viewer | `scaleY` about the crease |
 | A page turns about a binding | `scaleX` through edge-on |
 | **The change happens while the part is hidden** | **a discrete hard-swap of `d` at the covered instant** — no structure-matching needed at all |
 
-**Morph only when the material genuinely bends and the bend is visible the whole way.** A book closing is a morph; a book sliding is not. And if there is any instant where the changing part is fully covered, swap `d` discretely there instead (SKILL.md § Choose the mechanism) — a hard-swap at a provably covered frame needs no matched structure and lets the source arcs stay verbatim.
+**Morph only when the material genuinely bends and the bend is visible the whole way.** A book closing is a morph; a book sliding is not. And if there is any instant where the changing part is fully covered, swap `d` discretely there instead ([SKILL.md](../SKILL.md) § Choose the mechanism) — a hard-swap at a provably covered frame needs no matched structure and lets the source arcs stay verbatim.
 
 **A morph is only ever as good as its two drawings.** If the two poses are topologically far apart and the return leg skips the hand-drawn in-between, the per-point tween slides each control point in a straight line to its counterpart and passes through a shape that is neither pose. That is the "morphing rather than folding" tell. The fix is not in the CSS; it is redrawing the poses closer, or adding the missing middle frame, so every leg of the trip has a real drawing under it.
 

@@ -1,10 +1,29 @@
 # The gesture catalog
 
+## Quick lookup
+
+| Verb (object does…) | Family |
+|---|---|
+| written, drawn, checked, routed, signed | 1. Draw-on |
+| goes somewhere — send, upload, arrow | 2. Travel-and-return |
+| opens, closes, swings, tilts | 3. Hinge |
+| comes apart / plugs in / merges | 4. Separate-and-rejoin |
+| arrives, drops, is delivered | 5. Fall-and-land |
+| fills, empties, charges | 6. Fill-and-drain |
+| emits, broadcasts, notifies, beats | 7. Pulse-from-source |
+| counts, ticks, scrolls, sorts | 8. Step-and-hold |
+| turns / refreshes (needs rotational symmetry) | 9. Free revolution |
+| something happens *inside* a frame | 10. Contents-in-frame |
+| material bends — book, hand, flap | 11. Reshape → [MORPH.md](MORPH.md) |
+| becomes another icon (menu↔cross) | 12. Icon-swap → [ICON-MORPH.md](ICON-MORPH.md) |
+
+---
+
 Twelve families. Every icon gets one. A family is a **keyframe recipe parameterised by the icon's own geometry** — the shape of the motion is fixed, the numbers come from the file you are looking at.
 
 This is what makes 5,400 icons a production line instead of 5,400 art projects. The name prefixes cluster hard: 94 `Arrow*`, 58 `Folder*`, 53 `Mail*`, 50 `Chart*`, 47 `Calendar*`, 34 `Cloud*`, 32 `Sun*`, 24 `Wifi*`. One family decision covers a whole cluster, and only the coordinates change per icon.
 
-**Picking:** name the verb (SKILL.md step 2), then find the family whose verb matches. If two fit, pick the one that moves fewer parts.
+**Picking:** name the verb ([SKILL.md](../SKILL.md) step 2), then find the family whose verb matches. If two fit, pick the one that moves fewer parts.
 
 **Adding:** a new family is allowed and should be rare. Add it here with a worked example the first time you need it.
 
@@ -31,7 +50,7 @@ Set `pathLength="1"` on the path so the CSS talks in 0→1 instead of arc length
 - **Never `linear`.** A pen leaves fast and eases into its stop; linear is a progress bar. This is the single most common failure in existing animated-icon libraries.
 - **Draw in the order a hand would.** Multi-part icons get sequenced strokes, not simultaneous ones: trunk down → loop the ring → back out along the branch → set the dot.
 - **A compound path draws all its subpaths at once.** Multiple `M` subpaths in one `d` share one dash pattern, so they all draw simultaneously. Split them into separate `<path>` elements with staggered delays to get the hand-drawn sequence.
-- Closed paths hide at `1.02`, not `1` (TECHNIQUE #8).
+- Closed paths hide at `1.02`, not `1` ([FAILURES.md](FAILURES.md) #8).
 - Where a stroke should drain *into* something rather than off its end, go toward `−1.02` instead.
 
 **Hugeicons:** `Edit*`, `PenTool*`, `Signature*`, `Route*`, `Chart Line*`, `Analytics*`, `Connect*`, `Flowchart*`, `Ruler*`, `Draw*`, `Task*` checkmarks.
@@ -181,7 +200,7 @@ Set `pathLength="1"` on the path so the CSS talks in 0→1 instead of arc length
 - Each hold is an arrival. Without holds it is one long slide and the counting is lost.
 - **A ripple is not a click, and the difference is measurable.** A continuous move whose speed merely *dips* at each landing reads as one slide with a wobble, however carefully the dips are placed. The test is the **minimum speed inside each beat**, read off the computed matrix: it has to reach ~zero. A gear built from a solved detent model modulated 180° with a 2:1 speed ripple and never dropped below **231°/s** — it was reported as "rotating, not ticking", and that was the right call. Rebuilt as hold → impulse → seat → hold it measures **0.0°/s**, with 23% of the clock genuinely still.
 - **A tick is four parts, not one.** Recoil (a real escapement kicks back before it releases, and it doubles as the anticipation), impulse, seat, hold. The seat is the click: overshoot about 1.5px of travel at the moving part's outer radius and come back through a hard 0.2 decay.
-- **Every intermediate landing must look different from the others, and the first and last must be the source glyph.** If the repeated elements are identical, sliding them changes nothing on screen (TECHNIQUE #10). Where the source is uniform, vary what you add: the log-scroll icon uses six lines of widths `64 64 40 64 64 40` and steps three times, so period-three against a two-line window makes every landing distinct while rest stays exactly the source picture.
+- **Every intermediate landing must look different from the others, and the first and last must be the source glyph.** If the repeated elements are identical, sliding them changes nothing on screen ([FAILURES.md](FAILURES.md) #10). Where the source is uniform, vary what you add: the log-scroll icon uses six lines of widths `64 64 40 64 64 40` and steps three times, so period-three against a two-line window makes every landing distinct while rest stays exactly the source picture.
 - Ease each step with `cubic-bezier(0.3,0,0.2,1)` and hold for roughly as long as the step took.
 
 **Hugeicons:** `Clock*`, `Timer*`, `Calendar*`, `Sort*`, `List*`, `Menu*`, `Queue*`, `Chart Bar*`, `Steps*`, `Pagination*`.
@@ -225,7 +244,7 @@ Set `pathLength="1"` on the path so the CSS talks in 0→1 instead of arc length
 
 **Verb:** it folds, closes, curls, bends, signs — the material itself changes shape, and no transform can fake it.
 
-**Mechanism:** a **`d`-morph**. Author the path twice, once per pose, with the *same command structure* — same `M/C/L/Z` sequence, same number of points, only the coordinates differ — and interpolate the CSS `d` property. Chrome walks every point from one pose to the next. This is the one family that is genuinely a different tool, so it has its own file: **read `MORPH.md` before using it.**
+**Mechanism:** a **`d`-morph**. Author the path twice, once per pose, with the *same command structure* — same `M/C/L/Z` sequence, same number of points, only the coordinates differ — and interpolate the CSS `d` property. Chrome walks every point from one pose to the next. This is the one family that is genuinely a different tool, so it has its own file: **read [MORPH.md](MORPH.md) before using it.**
 
 ```css
 @keyframes ig-close {
@@ -237,10 +256,10 @@ Set `pathLength="1"` on the path so the CSS talks in 0→1 instead of arc length
 ```
 
 **Rules**
-- **Only when the shape truly changes.** A book closing, a flap tenting open, a hand folding. If a translate, scale, or occlusion can produce the same picture, use that instead — a morph is expensive to author and brittle under edits (see `MORPH.md` § When not to morph).
-- **Identical command structure or it will not interpolate.** Two paths with the same drawing but a different point count snap instead of morphing. Match them (de Casteljau subdivision, collapsing spare segments onto a drawn point) as in `MORPH.md`.
+- **Only when the shape truly changes.** A book closing, a flap tenting open, a hand folding. If a translate, scale, or occlusion can produce the same picture, use that instead — a morph is expensive to author and brittle under edits (see [MORPH.md](MORPH.md) § When not to morph).
+- **Identical command structure or it will not interpolate.** Two paths with the same drawing but a different point count snap instead of morphing. Match them (de Casteljau subdivision, collapsing spare segments onto a drawn point) as in [MORPH.md](MORPH.md).
 - **ease-in-out**, because the shape is on screen the whole time and morphing is "moving on screen," never entering or leaving.
-- **A hard-swap beats a morph wherever coverage is provable.** If the change happens while the part is hidden, swap `d` discretely at that instant instead (SKILL.md § Choose the mechanism). Morph only when the bend is visible the whole way.
+- **A hard-swap beats a morph wherever coverage is provable.** If the change happens while the part is hidden, swap `d` discretely at that instant instead ([SKILL.md](../SKILL.md) § Choose the mechanism). Morph only when the bend is visible the whole way.
 - Rest lives on the `d` attribute of the element, and the last keyframe returns to it.
 
 **Hugeicons / hand sets:** `Book*` open↔shut, `Notebook*`, `Envelope*`/`Mail*` flaps, folding-hand gestures (fist, sign, pinch), `Origami*`, `Fold*`, anything drawn as two poses of one bending object.
@@ -251,7 +270,7 @@ Set `pathLength="1"` on the path so the CSS talks in 0→1 instead of arc length
 
 **Verb:** it *becomes* another icon — one UI slot where the glyph transforms into a different glyph. Menu into cross, play into pause, arrow-right into arrow-down.
 
-**Mechanism:** the **three-line system**. Every icon in the swap set is exactly three SVG `<line>` elements; icons that need fewer collapse the extras to an invisible center point (`{ x1: 7, y1: 7, x2: 7, y2: 7 }`, `opacity: 0`). Shared structure means any icon can morph into any other. This is a different tool from the `d`-morph and has its own file: **read `ICON-MORPH.md` before using it.**
+**Mechanism:** the **three-line system**. Every icon in the swap set is exactly three SVG `<line>` elements; icons that need fewer collapse the extras to an invisible center point (`{ x1: 7, y1: 7, x2: 7, y2: 7 }`, `opacity: 0`). Shared structure means any icon can morph into any other. This is a different tool from the `d`-morph and has its own file: **read [ICON-MORPH.md](ICON-MORPH.md) before using it.**
 
 **Rules**
 - **Rotation groups first.** Icons that are the same shape at different rotations (arrows and chevrons at 90°, plus/cross at 45°) share one coordinate set and animate rotation only. Morphing their coordinates bends and warps the lines; rotating just works.

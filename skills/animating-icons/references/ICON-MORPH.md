@@ -2,7 +2,7 @@
 
 The technique for **state-swap icons**: one slot in the UI where any icon must be able to become any other icon. The hamburger that rotates into a cross, play that becomes pause, arrow-right that turns to point down. Not a crossfade, not an opacity trick — the lines themselves move.
 
-Source: [benji.org/morphing-icons-with-claude](https://benji.org/morphing-icons-with-claude). This is a different tool from the hover-gesture kit (`FAMILIES.md`) and from the `d`-morph (`MORPH.md`): it trades per-icon fidelity for universal morphability, and it is the right call only when icons genuinely swap into each other's place.
+Source: [benji.org/morphing-icons-with-claude](https://benji.org/morphing-icons-with-claude). This is a different tool from the hover-gesture kit ([FAMILIES.md](FAMILIES.md)) and from the `d`-morph ([MORPH.md](MORPH.md)): it trades per-icon fidelity for universal morphability, and it is the right call only when icons genuinely swap into each other's place.
 
 ---
 
@@ -74,8 +74,8 @@ From there, it's iteration: **play with the result, notice what's wrong, describ
 | Situation | Tool |
 |---|---|
 | One UI slot where icons swap state (menu↔cross, play↔pause, sort arrows) | **This file** — three-line morph |
-| An icon performs its own gesture on hover and returns to rest | `FAMILIES.md` |
-| A single icon's shape genuinely bends (book closes, hand folds) with full source fidelity | `MORPH.md` — CSS `d` morph |
+| An icon performs its own gesture on hover and returns to rest | [FAMILIES.md](FAMILIES.md) |
+| A single icon's shape genuinely bends (book closes, hand folds) with full source fidelity | [MORPH.md](MORPH.md) — CSS `d` morph |
 
 The three-line constraint is lossy by design: a 21-icon utility set (arrows, chevrons, playback, math marks) fits it; a 24×24 multi-path glyph library does not. Do not force a Hugeicons duotone through three lines, and do not hand-match `d` structures for a hamburger↔cross toggle when three lines and a rotation would do.
 
@@ -84,4 +84,4 @@ The three-line constraint is lossy by design: a 21-icon utility set (arrows, che
 - **Gate 2 (rest test) is per icon, not per transition.** A transition deliberately ends on a *different* icon — that is the point. What must hold: each icon's three-line pose is stable, and morphing A→B→A lands back on A's exact coordinates.
 - **Gate 3 (strip test) becomes the sequencer.** The intermediate frames of a morph will not read as either icon; what they must read as is *transformation*, not noise. Awkward intermediate states are the thing to hunt.
 - **The swap test inverts.** Here every icon *sharing* the structure is the feature. The test that replaces it: does the transition read as the lines transforming, or as a crossfade? A crossfade fails.
-- **CSS-only does not apply** — this family is a JS-driven state transition (SKILL.md step 7, the scoped exception).
+- **CSS-only does not apply** — this family is a JS-driven state transition ([SKILL.md](../SKILL.md) step 7, the scoped exception).

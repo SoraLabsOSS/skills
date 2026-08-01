@@ -2,9 +2,9 @@
 
 [![skills.sh](https://skills.sh/b/SoraLabsOSS/skills)](https://skills.sh/SoraLabsOSS/skills)
 
-A Claude Code skill for animating SVG icons.
+A Claude Code / Cursor / Codex skill for animating SVG icons.
 
-An icon is not a picture you move. It is an object that **does something**, and the animation is that thing happening once. A bell rings, a plug comes out of its socket, a branch writes itself. The motion has to be something only *that* object could do.
+An icon is not a picture you move. It is an object that **does something**, and the animation is that thing happening once. A bell rings, a plug comes out of its socket, a branch writes itself. The motion has to be something only _that_ object could do.
 
 That is the whole idea, and the rest of the skill is what it takes to actually hold the line: twelve gesture families, a seventeen-item catalog of the ways these break, the vector-morph correspondence method, the three-line icon-to-icon morph system, and a verification harness that measures instead of eyeballing.
 
@@ -32,7 +32,7 @@ npx github:SoraLabsOSS/skills            # into ./.claude/skills  (this project)
 npx github:SoraLabsOSS/skills --global   # into ~/.claude/skills  (every project)
 ```
 
-**Or just copy it.** It is seven markdown files and two helper scripts. `skills/animating-icons/` into your `.claude/skills/`.
+**Or just copy it.** Copy `skills/animating-icons/` into your `.claude/skills/` (or Cursor skills dir).
 
 ## Using it
 
@@ -50,16 +50,23 @@ Prompts that work well with it:
 
 ## What is in it
 
-| File | |
-|---|---|
-| `SKILL.md` | The core principle, the swap test, the four gates, **landing on rest**, choosing the mechanism, the procedure, the budget |
-| `FAMILIES.md` | The twelve gesture families — draw-on, travel-and-return, hinge, separate-and-rejoin, fall-and-land, fill-and-drain, pulse-from-source, step-and-hold, free revolution, contents-in-frame, reshape, icon-swap |
-| `EXAMPLES.md` | Four golden examples worked end-to-end — hinge bell, travel-and-return send, sequenced draw-on, three-line icon-swap with real coordinates — every number annotated with where it came from |
-| `TECHNIQUE.md` | SVG/CSS mechanics: the failure catalog, fill weight, clearance sweeps, units, easing, the playback driver |
-| `MORPH.md` | The vector morph, and **correspondence** — which point becomes which, and why arc length is not it |
-| `ICON-MORPH.md` | Icon-to-icon morphing — the three-line system: every icon is three SVG lines, rotation groups rotate, everything else tweens coordinates |
-| `VERIFY.md` | Frame strips, difference overlays, the noise floor, reading motion off the computed matrix, and why a probe that returns zero may be measuring nothing |
-| `scripts/` | `seek-shot.sh` freezes the `?t=N` harness and screenshots each moment; `contact-sheet.sh` tiles the frames into one image |
+Layout follows the [Agent Skills](https://agentskills.io/specification) progressive-disclosure model: lean `SKILL.md`, details in `references/`, helpers in `scripts/`.
+
+| Path                       |                                                                                                        |
+| -------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `SKILL.md`                 | Principle, swap test, four gates, landing on rest, mechanism choice, procedure, budget, Done checklist |
+| `references/FAMILIES.md`   | Twelve gesture families + verb→family lookup                                                           |
+| `references/EXAMPLES.md`   | Four golden examples — every number annotated with where it came from                                  |
+| `references/FAILURES.md`   | Seventeen failure modes (read before authoring)                                                        |
+| `references/TECHNIQUE.md`  | Units, driver, clearance, SVGO, clocks                                                                 |
+| `references/EASING.md`     | House curves, peak slope, physics fit                                                                  |
+| `references/FILL.md`       | Fill-weight (Phosphor-style) material rules                                                            |
+| `references/MORPH.md`      | Vector morph + correspondence                                                                          |
+| `references/ICON-MORPH.md` | Three-line icon↔icon morph system                                                                      |
+| `references/VERIFY.md`     | Frame strips, difference overlays, motion matrix                                                       |
+| `scripts/verify-icon.mjs`  | One-command rest + seek capture + `ig-*` assert                                                        |
+| `scripts/seek-shot.sh`     | Freeze `?t=N` and screenshot                                                                           |
+| `scripts/contact-sheet.sh` | Tile frames into one image                                                                             |
 
 ## The parts I would read first
 

@@ -1,6 +1,6 @@
 {
   "name": "animating-icons",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "A method for animating SVG icons so each gesture is the icon's own meaning acting on itself, not a generic wiggle. Families, mechanics, morph correspondence, icon-to-icon morphing, and a measurement-based verification harness.",
   "author": {
     "name": "SoraLabs",
@@ -9,6 +9,15 @@
   "homepage": "https://github.com/SoraLabsOSS/skills",
   "repository": "https://github.com/SoraLabsOSS/skills",
   "license": "MIT",
-  "keywords": ["icons", "svg", "animation", "motion", "phosphor", "lucide", "hugeicons", "design-engineering"],
+  "keywords": [
+    "icons",
+    "svg",
+    "animation",
+    "motion",
+    "phosphor",
+    "lucide",
+    "hugeicons",
+    "design-engineering"
+  ],
   "skills": "./skills/"
 }

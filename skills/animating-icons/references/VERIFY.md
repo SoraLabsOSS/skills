@@ -35,18 +35,18 @@ Clone the icon N times (12–16 is enough), pin each clone to a paused negative 
 
 **Two gotchas that will silently produce a fake strip:**
 
-1. **Duplicate ids.** Clones with `mask="url(#m)"` all resolve to the first mask in the document, so every cell renders cell 1's mask. Rewrite the id per clone (TECHNIQUE #6).
-2. **A parked cursor.** `browse hover` leaves the pointer where it was; hover away before capturing a "rest" shot or your rest frame is a hover frame.
+1. **Duplicate ids.** Clones with `mask="url(#m)"` all resolve to the first mask in the document, so every cell renders cell 1's mask. Rewrite the id per clone ([FAILURES.md](FAILURES.md) #6).
+2. **A parked cursor.** Hover away before capturing a "rest" shot or your rest frame is a hover frame.
 
 **Reading the strip:**
 
-| Look for | Means |
-|---|---|
-| A frame where the glyph is unrecognisable | The gesture disassembles the icon. Reduce the travel or move fewer parts. |
-| Two adjacent frames identical | A dead segment. Either a hold you did not intend, or a keyframe that is not interpolating (TECHNIQUE #3). |
-| A jump between two adjacent frames | Transform list mismatch, or a discrete step you did not intend. |
-| A part half-behind another for several frames | The motion is invisible for that stretch (TECHNIQUE #10). |
-| First and last cells not identical | Gate 2 failure. |
+| Look for                                      | Means                                                                                                                      |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| A frame where the glyph is unrecognisable     | The gesture disassembles the icon. Reduce the travel or move fewer parts.                                                  |
+| Two adjacent frames identical                 | A dead segment. Either a hold you did not intend, or a keyframe that is not interpolating ([FAILURES.md](FAILURES.md) #3). |
+| A jump between two adjacent frames            | Transform list mismatch, or a discrete step you did not intend.                                                            |
+| A part half-behind another for several frames | The motion is invisible for that stretch ([FAILURES.md](FAILURES.md) #10).                                                 |
+| First and last cells not identical            | Gate 2 failure.                                                                                                            |
 
 **Read the strip numerically as well as visually.** Dead air is the opposite of snappy and it is easier to count than to see:
 
@@ -54,17 +54,13 @@ Clone the icon N times (12–16 is enough), pin each clone to a paused negative 
 n = sum(1 for p in ImageChops.difference(frame, prev).getdata() if p > 8)
 ```
 
-Under ~40 is a dead segment. **One still pair is an intended beat; three in a row is a bug** — a 190ms hold produced three consecutive zero-delta frames in a 17-frame strip and read as the gesture stalling. The same numbers also show you the rhythm: in a working step-and-hold the snaps come out around 30,000 and the holds at exactly 0, and that contrast *is* the tick.
+Under ~40 is a dead segment. **One still pair is an intended beat; three in a row is a bug** — a 190ms hold produced three consecutive zero-delta frames in a 17-frame strip and read as the gesture stalling. The same numbers also show you the rhythm: in a working step-and-hold the snaps come out around 30,000 and the holds at exactly 0, and that contrast _is_ the tick.
 
-Capture the strip with `browse`:
+Capture the strip with Playwright (or any headless screenshot), then **Read the PNG** so it is actually looked at. A screenshot nobody opened has verified nothing.
 
 ```bash
-$B viewport 1400x200 --scale 2
-$B goto file://./strip.html
-$B screenshot /tmp/strip.png --selector .strip
+npx playwright screenshot --viewport-size=1400,200 file://./strip.html strip.png
 ```
-
-Then **Read the PNG** so it is actually looked at. A screenshot nobody opened has verified nothing.
 
 ---
 
@@ -88,17 +84,17 @@ const out = [];
 for (let t = 0; t <= DUR; t += 5) {
   anims.forEach((a) => (a.currentTime = t));
   const m = new DOMMatrix(getComputedStyle(el).transform);
-  out.push([t, Math.atan2(m.b, m.a) * 180 / Math.PI]);   // m.e / m.f for a translate
+  out.push([t, (Math.atan2(m.b, m.a) * 180) / Math.PI]); // m.e / m.f for a translate
 }
 ```
 
 Then ask three questions of the numbers, not of the render:
 
-| Question | What it catches | Seen |
-|---|---|---|
-| **Peak speed** — max \|dθ/dt\| | aliasing | a clock hand on the house ease-out-expo peaked at **82.6°/frame**; nothing in the code said so |
-| **Minimum speed** inside each beat | a step-and-hold that never actually stops | a gear "ticking" held a **231°/s** floor — a ripple, not a click, and it read as rotating. Rebuilt: **0.0°/s** |
-| **The ratio between two parts** | a relationship you claimed but did not enforce | two hands geared 12:1 measure **12.0000** across the whole run only because they share one timing function |
+| Question                           | What it catches                                | Seen                                                                                                           |
+| ---------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **Peak speed** — max \|dθ/dt\|     | aliasing                                       | a clock hand on the house ease-out-expo peaked at **82.6°/frame**; nothing in the code said so                 |
+| **Minimum speed** inside each beat | a step-and-hold that never actually stops      | a gear "ticking" held a **231°/s** floor — a ripple, not a click, and it read as rotating. Rebuilt: **0.0°/s** |
+| **The ratio between two parts**    | a relationship you claimed but did not enforce | two hands geared 12:1 measure **12.0000** across the whole run only because they share one timing function     |
 
 Unwrap the angle before differentiating or every wrap reads as a spike. And do it against the **shipped CSS**, not against the model you solved — the point is to prove the browser delivers what you designed.
 
@@ -172,33 +168,49 @@ Three specific ways a rig goes silently dead:
 
 Two of the scariest numbers you will see are your own measurement mistakes. When a render looks catastrophically wrong, check these before touching the icon:
 
-- **Capture rest FIRST, on a clean load, before anything is ever paused.** A paused animation keeps applying its effect after its rule stops matching, so pausing mid-fall and *then* removing `data-go` reports the mid-fall pose as "rest."
+- **Capture rest FIRST, on a clean load, before anything is ever paused.** A paused animation keeps applying its effect after its rule stops matching, so pausing mid-fall and _then_ removing `data-go` reports the mid-fall pose as "rest."
 - **When the states being compared can shift the capture by a pixel** (toggling `display`, splitting a node), a 1px shift reads as a thousand-pixel diff. Use a shift-immune measure — ink counts, bounding boxes — not a raw pixel diff.
 - **The verifier needs verifying.** SVG duplicates an odd-length `stroke-dasharray` (a three-value list becomes six), so a checker that does not duplicate will score a half-drawn line as fully clear. When a checker reports "all clear" on the first run, suspect the checker.
-- **Backticks inside a CSS template literal terminate the string.** Guard any `export const X_CSS = \`…\`` you touched: `assert '\`' not in lit`.
+- **Backticks inside a CSS template literal terminate the string.** Guard any `export const X_CSS = \`…\``you touched:`assert '\`' not in lit`.
 - **Re-resolve the cell by its label text every run, never a remembered index** — another agent adding a glyph shifts every `nth-child`.
-- **Gate a "settled" screenshot on a real completion flag set in the page, not an unawaited `await animation.finished`** — the browse bridge does not await returned promises, so you capture mid-gesture.
+- **Gate a "settled" screenshot on a real completion flag set in the page** (e.g. `window.__ready`), not an unawaited `animation.finished` promise from outside the page — headless tools often capture mid-gesture otherwise.
 - **Cachebust after edits** (`?v=$RANDOM`); HMR sometimes serves a stale component and you measure the old build. And **clear the frame-strip directory when the duration changes**, or an old strip at a different filename interleaves with the new one and reads as insane.
 
 ---
 
 ## A one-command harness
 
-Per-icon verification is ~10 manual browse calls; fold it into one script and it becomes one call plus one strip read. The gates that matter, in order: **source vs rest** (px > 8 after the corner-AA allowance), **frame 0 vs final** (0 or noise-floor), the **paused strip** read at 3×, and a **live hover run** (dispatch pointerover, wait for the driver to clear `data-go`, diff before/after — must be 0). Recreate the script freely; it is short, and having it is what makes a second pass cheap enough to actually do.
+Run this after authoring. It does not claim a full gate pass — it captures rest + seek frames, asserts `ig-` animations exist, and tiles a contact sheet when ffmpeg is available. You still Read the sheet and run the remaining gates by hand.
+
+```bash
+node scripts/verify-icon.mjs path/to/icon.html --dur 0.9
+```
+
+Needs: Node 18+, Playwright (`npx` fetches Chromium on first run). Optional: ffmpeg for the contact sheet.
+
+The gates that still need agent eyes, in order: **source vs rest** (px > 8 after the corner-AA allowance), **frame 0 vs final** (0 or noise-floor), the **paused strip / sheet** read at 3×, **motion matrix** (gate 4), and a **live hover run** (dispatch pointerover, wait for the driver to clear `data-go`, diff before/after — must be 0).
 
 ## The `?t=N` seek harness
 
-For a quick spot-check that does not need the full strip, bake a seek hook into the test page: `?t=N` starts the gesture through the real trigger, then pauses every animation at `t` seconds, so a headless screenshot lands on a deterministic still.
+Bake a seek hook into the test page: `?t=N` starts the gesture through the real trigger, then pauses every animation at `t` seconds, so a headless screenshot lands on a deterministic still. `verify-icon.mjs` and `seek-shot.sh` both drive this hook.
 
 ```html
 <script>
   const t = new URLSearchParams(location.search).get("t");
   if (t !== null) {
-    icon.setAttribute("data-go", "");                     // the REAL trigger, not a shortcut
+    icon.setAttribute("data-go", ""); // the REAL trigger, not a shortcut
     requestAnimationFrame(() => {
-      const anims = icon.getAnimations({ subtree: true });
-      console.assert(anims.length > 0, "no animations — the harness is measuring nothing");
-      anims.forEach((a) => { a.pause(); a.currentTime = parseFloat(t) * 1000; });
+      const anims = icon
+        .getAnimations({ subtree: true })
+        .filter((a) => a.animationName?.startsWith("ig-"));
+      console.assert(
+        anims.length > 0,
+        "no animations — the harness is measuring nothing",
+      );
+      anims.forEach((a) => {
+        a.pause();
+        a.currentTime = parseFloat(t) * 1000;
+      });
       window.__ready = true;
     });
   }
@@ -207,7 +219,7 @@ For a quick spot-check that does not need the full strip, bake a seek hook into 
 
 Assert the animation count before trusting the frame (§ A probe that returns 0), and remember a paused animation keeps applying its effect — capture rest on a clean load with no `?t` at all, never by un-pausing.
 
-Two shipped helpers drive it (`scripts/`, adapted from `iart-ai/web-animation-skills`):
+Lower-level helpers (adapted from `iart-ai/web-animation-skills`, MIT):
 
 ```bash
 scripts/seek-shot.sh icon.html 0 0.4 0.8       # frozen screenshots at those times
@@ -232,7 +244,8 @@ The second sweep is a **cross-family** sheet: one icon from each family, side by
 
 ## Before shipping an icon
 
-- [ ] Which of the four landing strategies this gesture uses, named out loud (SKILL.md § Landing on rest)
+- [ ] Which of the four landing strategies this gesture uses, named out loud ([SKILL.md](../SKILL.md) § Landing on rest)
+- [ ] `scripts/verify-icon.mjs` (or seek-shot + contact-sheet) run; sheet Read
 - [ ] Noise floor known (no-op animation vs detached rest), and rest captured first on a clean load
 - [ ] Every probe that returned 0 shown capable of returning non-zero
 - [ ] Difference overlay clean at frame 0 **and** the final frame

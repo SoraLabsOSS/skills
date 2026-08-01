@@ -1,13 +1,13 @@
 # Four golden examples
 
-Four complete, end-to-end icons — one per common family. Copy the **shape** of these, never the numbers: every number below is derived from *this* drawing, and yours must be derived from yours (SKILL.md step 6). Each example names its family, its landing, and where each number came from.
+Four complete, end-to-end icons — one per common family. Copy the **shape** of these, never the numbers: every number below is derived from *this* drawing, and yours must be derived from yours ([SKILL.md](../SKILL.md) step 6). Each example names its family, its landing, and where each number came from.
 
 The first three share the same scaffolding:
 
-- The gesture fires on `[data-go]`, set by the driver in `TECHNIQUE.md` § Driver (dwell 130ms, guaranteed finish, ×2.2 exit rate). Never on `:hover` directly.
+- The gesture fires on `[data-go]`, set by the driver in [TECHNIQUE.md](TECHNIQUE.md) § Driver (dwell 130ms, guaranteed finish, ×2.2 exit rate). Never on `:hover` directly.
 - Hover rules live inside `@media (hover: hover) and (pointer: fine)`.
 - `@media (prefers-reduced-motion: reduce) { .ig-part { animation: none; } }` — safe because rest is declared in base rules (gate 2).
-- Animation names are prefixed `ig-` so the driver and the harness can count them (failure #15).
+- Animation names are prefixed `ig-` so the driver and the harness can count them ([FAILURES.md](FAILURES.md) #15).
 
 ---
 
@@ -45,10 +45,10 @@ The dome swings about the real hinge; the clapper runs the *same* track 2.5% lat
 
 Where each number came from:
 
-- **`transform-origin: 12px 3px`** — the top of the crown, where the drawing's dome meets its mount. Read off the `d`, not guessed. `view-box` because dome and clapper must share one pivot (failure #4).
-- **`14° → −9° → 5.5° → −2.5° → 0`** — decay ratio ~0.64 per swing, three returns, landing exactly on zero (TECHNIQUE § Easing, decay ratios). 14° is capped where the dome's skirt would exit the frame.
+- **`transform-origin: 12px 3px`** — the top of the crown, where the drawing's dome meets its mount. Read off the `d`, not guessed. `view-box` because dome and clapper must share one pivot ([FAILURES.md](FAILURES.md) #4).
+- **`14° → −9° → 5.5° → −2.5° → 0`** — decay ratio ~0.64 per swing, three returns, landing exactly on zero ([EASING.md](EASING.md), decay ratios). 14° is capped where the dome's skirt would exit the frame.
 - **`animation-delay: 22ms`** — 2.5% of 900ms. Same keyframes, offset clock; the clapper is a *consequence*, so it gets a delay, not its own track.
-- **No base rule needed** — the rest transform is the identity, so the fallback is already correct (failure #2 only bites non-identity rest values).
+- **No base rule needed** — the rest transform is the identity, so the fallback is already correct ([FAILURES.md](FAILURES.md) #2 only bites non-identity rest values).
 - **`900ms`** — one event, inside the 600–1100ms gesture budget.
 
 Gates to run: difference overlay at rest (gate 2 — the delay means the clapper is mid-swing when the dome finishes; the shared 100% frame at 0° is what saves it, verify it), strip at 96px, peak speed of the first swing.
@@ -85,7 +85,7 @@ The plane exits along **its own pointing axis** (up-right, 45°), is repositione
 
 Where each number came from:
 
-- **`(19px, −19px)`** — 19 *user units* in the 24 box: far enough that the glyph plus half its stroke width is fully outside the viewBox on the diagonal. Measured off the ink, not the centreline (TECHNIQUE § Prove clearance). Inside the `<svg>` these scale for free at any render size.
+- **`(19px, −19px)`** — 19 *user units* in the 24 box: far enough that the glyph plus half its stroke width is fully outside the viewBox on the diagonal. Measured off the ink, not the centreline ([TECHNIQUE.md](TECHNIQUE.md) § Prove clearance). Inside the `<svg>` these scale for free at any render size.
 - **The axis is the icon's own** — this plane points up-right, so it travels up-right. An arrow pointing down would travel down. Direction is the only parameter of this family.
 - **Departure ⅓, return ⅔** — 0→34% out, 34→100% back. Leaving is the one place ease-**in** is correct; arriving is ease-out and takes roughly twice as long.
 - **`34.01%`** — the blind jump lives on a hundredth-of-a-percent window while the mover is provably outside the clip. Prove the invisibility by measurement: screenshot the 34% frame and diff against rest minus the plane.
@@ -99,7 +99,7 @@ Gates to run: the 34% frame must show *zero* plane pixels (re-arm proof), rest d
 
 **Verb:** it is checked off. **Landing:** the last keyframe is the rest picture — both strokes end fully drawn, exactly as the base rules state.
 
-Two parts drawn **in the order a hand would**: ring first, then the tick set inside it. A tick is not a shape that appears; it is a stroke that is drawn (TECHNIQUE § One clock or many).
+Two parts drawn **in the order a hand would**: ring first, then the tick set inside it. A tick is not a shape that appears; it is a stroke that is drawn ([TECHNIQUE.md](TECHNIQUE.md) § One clock or many).
 
 ```html
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
@@ -110,7 +110,7 @@ Two parts drawn **in the order a hand would**: ring first, then the tick set ins
 ```
 
 ```css
-/* rest state said out loud: fully drawn (failure #2) */
+/* rest state said out loud: fully drawn ([FAILURES.md](FAILURES.md) #2) */
 .ring { stroke-dasharray: 1.02; stroke-dashoffset: 0; }
 .tick { stroke-dasharray: 1;    stroke-dashoffset: 0; }
 
@@ -134,7 +134,7 @@ Two parts drawn **in the order a hand would**: ring first, then the tick set ins
 Where each number came from:
 
 - **`pathLength="1"`** — the CSS talks in fractions, not arc lengths, so editing the path never breaks the numbers.
-- **`1.02` on the circle, `1` on the tick** — the circle is a closed path; a dash of exactly one lap leaves a hairline nick where its two butt caps meet (failure #8). The tick is open, so 1 is exact.
+- **`1.02` on the circle, `1` on the tick** — the circle is a closed path; a dash of exactly one lap leaves a hairline nick where its two butt caps meet ([FAILURES.md](FAILURES.md) #8). The tick is open, so 1 is exact.
 - **Two elements, not one compound path** — a compound path draws all its subpaths at once; sequencing requires separate elements (FAMILIES § 1).
 - **One clock, 55% / 60%** — the tick starts only after the ring has finished, with a 5% breath between. Beats do not overlap. One shared duration because the handoff must land relative to the ring's completion.
 - **`cubic-bezier(0.45,0,0.15,1)`** — the pen curve. Never `linear`: linear is a progress bar, and it is the single most common failure in existing animated-icon libraries. The timing function sits *inside* the keyframe that starts each drawing segment.
@@ -148,7 +148,7 @@ Gates to run: rest diff (the base rules are exactly the 100% frames — verify, 
 
 **Verb:** it *becomes* another icon. **Landing:** per icon, not per transition — A→B→A must land back on A's exact coordinates.
 
-This is the three-line system (`ICON-MORPH.md`), and it is the scoped exception to CSS-only: a state transition driven by app state, tweened with Motion. Every icon is exactly three `<line>`s in a **14×14 box centred on (7,7)**; unused lines collapse to the centre point at `opacity: 0`.
+This is the three-line system ([ICON-MORPH.md](ICON-MORPH.md)), and it is the scoped exception to CSS-only: a state transition driven by app state, tweened with Motion. Every icon is exactly three `<line>`s in a **14×14 box centred on (7,7)**; unused lines collapse to the centre point at `opacity: 0`.
 
 Real coordinates, verbatim from a working set:
 
@@ -179,7 +179,7 @@ Where each number came from:
 - **`4.172` / `9.828` = 7 ∓ 2√2** — the cross is the plus (arm length 4) rotated 45°: each endpoint lands at `7 ± 4/√2 = 7 ± 2.828`. Not eyeballed diagonals; the rotation of the sibling icon's own geometry.
 - **The collapse point is exactly `(7,7)`** — the centre of the box. Collapsing anywhere else makes the dying line visibly drift off-centre mid-tween. `opacity: 0` is mandatory: a zero-length line with a round cap renders as a dot.
 - **Check's two legs share the elbow `(5.5, 10.5)`** — line 1 ends where line 2 starts, and the shared round caps weld the corner into one stroke. Tween them separately and the elbow tears open mid-morph; the shared endpoint is what keeps the check whole in flight.
-- **Menu → cross tweens coordinates** (different rotation groups — three bars have no rotation that makes an X). **Plus → cross must NOT use these tables**: they are the same shape 45° apart, so that pair animates rotation only (`ICON-MORPH.md` § Rotation groups). Check the group before reaching for the coordinate tween.
+- **Menu → cross tweens coordinates** (different rotation groups — three bars have no rotation that makes an X). **Plus → cross must NOT use these tables**: they are the same shape 45° apart, so that pair animates rotation only ([ICON-MORPH.md](ICON-MORPH.md) § Rotation groups). Check the group before reaching for the coordinate tween.
 - **Menu's third bar dies into the cross's collapsed slot** — 3 lines → 2 lines + centre point. The collapse is doing gesture work: the middle bar shrinking into the intersection reads as the X being *formed*, not as a bar fading out.
 
 Gates to run: cycle every pair in a sequencer (gate 3 becomes the sequencer here); morph A→B→A and diff B's return against A's original coordinates; and the crossfade test — if any transition reads as fade-out/fade-in rather than lines transforming, it fails.
