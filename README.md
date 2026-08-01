@@ -1,6 +1,12 @@
 # animating-icons
 
+[![animating-icons](https://animating-icons.soralabs.io.vn/assets/og-image.png)](https://animating-icons.soralabs.io.vn/)
+
 [![skills.sh](https://skills.sh/b/SoraLabsOSS/skills)](https://skills.sh/SoraLabsOSS/skills)
+·
+[Website](https://animating-icons.soralabs.io.vn/)
+·
+[Sora UI Icons](https://ui.soralabs.io.vn/docs/icons)
 
 A Claude Code / Cursor / Codex skill for animating SVG icons.
 
@@ -78,6 +84,6 @@ Layout follows the [Agent Skills](https://agentskills.io/specification) progress
 
 ## Credit
 
-The morphing technique came from [Benji Taylor's article](https://benji.org/morphing-icons-with-claude). The timing instincts are [Emil Kowalski's](https://animations.dev) — his course is the thing to read on motion. The `seek-shot`/`contact-sheet` verify scripts are adapted from [iart-ai/web-animation-skills](https://github.com/iart-ai/web-animation-skills) (MIT).
+The morphing technique came from [Benji Taylor's article](https://benji.org/morphing-icons-with-claude). The timing instincts are [Emil Kowalski's](https://animations.dev) — his course is the thing to read on motion. The `seek-shot`/`contact-sheet` verify scripts are adapted from [iart-ai/web-animation-skills](https://github.com/iart-ai/web-animation-skills) (MIT). Built by the team behind [Sora UI](https://ui.soralabs.io.vn/docs/icons).
 
 MIT.
