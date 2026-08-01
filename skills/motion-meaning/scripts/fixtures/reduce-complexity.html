@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>mm fixture: reduce complexity</title>
+    <style>
+      .band {
+        height: 48px;
+        margin: 40px;
+        background: #ddd;
+        position: relative;
+        overflow: hidden;
+      }
+      .layer {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          rgba(0, 0, 0, 0.35)
+        );
+        opacity: 0.4;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Fake multi-layer blur band — under reduce, one layer (not sixteen).</p>
+    <div class="band" id="band"></div>
+    <script>
+      (function () {
+        const q = new URLSearchParams(location.search);
+        const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const reduce = q.get("reduce") === "1" || mq.matches;
+        const FULL = 16;
+        const REDUCED = 1;
+        const n = reduce ? REDUCED : FULL;
+        const band = document.getElementById("band");
+        for (let i = 0; i < n; i++) {
+          const el = document.createElement("div");
+          el.className = "layer";
+          el.style.transform = "translateY(" + i + "px)";
+          band.appendChild(el);
+        }
+        window.__mm = {
+          contract: "reduce-complexity",
+          reduce,
+          layerCount: n,
+          maxAllowedWhenReduced: REDUCED,
+        };
+        window.__ready = true;
+      })();
+    </script>
+  </body>
+</html>

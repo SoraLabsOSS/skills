@@ -1,4 +1,4 @@
-# animating-icons
+# SoraLabs skills
 
 [![animating-icons](https://animating-icons.soralabs.io.vn/assets/og-image.png)](https://animating-icons.soralabs.io.vn/)
 
@@ -6,86 +6,103 @@
 ·
 [Website](https://animating-icons.soralabs.io.vn/)
 ·
-[Sora UI Icons](https://ui.soralabs.io.vn/docs/icons)
+[Sora UI](https://ui.soralabs.io.vn/)
 
-A Claude Code / Cursor / Codex skill for animating SVG icons.
+Agent skills for motion craft — small, opinionated, measurable. Built while shipping real UI, not from a generic a11y checklist.
 
-An icon is not a picture you move. It is an object that **does something**, and the animation is that thing happening once. A bell rings, a plug comes out of its socket, a branch writes itself. The motion has to be something only _that_ object could do.
+Each skill follows the [Agent Skills](https://agentskills.io/specification) progressive-disclosure model: lean `SKILL.md`, depth in `references/`, helpers in `scripts/`.
 
-That is the whole idea, and the rest of the skill is what it takes to actually hold the line: twelve gesture families, a seventeen-item catalog of the ways these break, the vector-morph correspondence method, the three-line icon-to-icon morph system, and a verification harness that measures instead of eyeballing.
+## Skills
 
-Built while animating a set of icons by hand, one at a time. Every number in it was paid for once.
+### [animating-icons](./skills/animating-icons/SKILL.md)
+
+An icon is not a picture you move. It is an object that **does something**, and the animation is that thing happening once.
+
+Twelve gesture families, a failure catalog, vector morph + icon↔icon morph, and a verify harness that measures instead of eyeballing.
+
+|                  |                                                                           |
+| ---------------- | ------------------------------------------------------------------------- |
+| Site             | [animating-icons.soralabs.io.vn](https://animating-icons.soralabs.io.vn/) |
+| Icons in product | [Sora UI Icons](https://ui.soralabs.io.vn/docs/icons)                     |
+| Verify           | `node skills/animating-icons/scripts/verify-icon.mjs` · `npm test`        |
+
+### [motion-meaning](./skills/motion-meaning/SKILL.md)
+
+**Reduced motion isn't about removing animation. It's about deciding what remains when animation disappears.**
+
+Classify motion as communicative (sequence = content) or decorative (decorating a result), pick a reduce strategy, audit dead branches, and verify both preference states.
+
+|             |                                                                                                |
+| ----------- | ---------------------------------------------------------------------------------------------- |
+| Blog origin | [prefers-reduced-motion in React](https://ui.soralabs.io.vn/blog/prefers-reduced-motion-react) |
+| Verify      | `node skills/motion-meaning/scripts/verify-reduced.mjs` · `npm run test:motion-meaning`        |
 
 ## Install
 
-**As a plugin** (recommended — you get it in every project, and `/plugin update` pulls changes). Inside Claude Code:
+**As a Claude Code plugin** (recommended — updates with `/plugin update`):
 
 ```
 /plugin marketplace add SoraLabsOSS/skills
 /plugin install animating-icons@soralabs
+/plugin install motion-meaning@soralabs
 ```
 
-**Via [skills.sh](https://skills.sh)** — works for Claude Code, Cursor, Codex, and other agents:
+Install one or both. The package exposes every skill under `skills/`.
+
+**Via [skills.sh](https://skills.sh)** — Claude Code, Cursor, Codex, and other agents:
 
 ```bash
 npx skills add SoraLabsOSS/skills
 ```
 
-**Or drop the files in** — no npm account or plugin system involved:
+Pick the skill(s) you want and which agents to install them on.
+
+**Or copy the folder** into your agent skills dir:
 
 ```bash
-npx github:SoraLabsOSS/skills            # into ./.claude/skills  (this project)
-npx github:SoraLabsOSS/skills --global   # into ~/.claude/skills  (every project)
+cp -r skills/animating-icons ~/.claude/skills/
+cp -r skills/motion-meaning  ~/.claude/skills/
 ```
 
-**Or just copy it.** Copy `skills/animating-icons/` into your `.claude/skills/` (or Cursor skills dir).
+**Or drop via the local installer** (animating-icons only today):
 
-## Using it
+```bash
+npx github:SoraLabsOSS/skills            # ./.claude/skills
+npx github:SoraLabsOSS/skills --global   # ~/.claude/skills
+```
 
-It fires on its own when you ask for icon animation work. You can also invoke it by name.
+## Using them
 
-Prompts that work well with it:
+Skills fire when the task matches their description. You can also invoke by name.
 
-> Animate the calendar icon on hover. Here are the poses I drew in Figma, left to right. Every drawing is a keyframe, morph through all of them in order. Rest is the original icon, pixel for pixel.
+**animating-icons** — icon hover gestures, morphs, “is there an honest verb?”
 
-> This is a filled icon. Probe whether the details are holes or marks first, then tell me whether this wants a transform, a morph, or a mask. Do not reach for a morph if a transform can do it.
+> Animate the calendar icon on hover. Here are the poses from Figma. Rest must match the source glyph pixel for pixel.
 
-> Before we animate this icon, is there an honest gesture here, or is it a noun with no mechanism? If there is no real verb, say so and leave it still.
+> Run the swap test on this gesture. If the keyframes would look fine on a different icon, throw them out.
 
-> This gesture plays but it feels generic. Run the swap test: could these exact keyframes sit on a different icon and still look fine? If yes, throw it out and start again from this icon's own verb.
+**motion-meaning** — reduced-motion audit/fix, gating new GSAP/Motion/CSS
 
-## What is in it
+> Audit this component for prefers-reduced-motion. Classify communicative vs decorative, pick a strategy, report file:line with a minimal fix.
 
-Layout follows the [Agent Skills](https://agentskills.io/specification) progressive-disclosure model: lean `SKILL.md`, details in `references/`, helpers in `scripts/`.
+> This scroll stack greps clean for reduced motion but looks broken under reduce — check for a dead end-state branch.
 
-| Path                        |                                                                                                        |
-| --------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `SKILL.md`                  | Principle, swap test, four gates, landing on rest, mechanism choice, procedure, budget, Done checklist |
-| `references/FAMILIES.md`    | Twelve gesture families + verb→family lookup                                                           |
-| `references/EXAMPLES.md`    | Four golden examples — every number annotated with where it came from                                  |
-| `references/FAILURES.md`    | Seventeen failure modes (read before authoring)                                                        |
-| `references/TECHNIQUE.md`   | Units, driver, clearance, SVGO, clocks                                                                 |
-| `references/EASING.md`      | House curves, peak slope, physics fit                                                                  |
-| `references/FILL.md`        | Fill-weight (Phosphor-style) material rules                                                            |
-| `references/MORPH.md`       | Vector morph + correspondence                                                                          |
-| `references/ICON-MORPH.md`  | Three-line icon↔icon morph system                                                                      |
-| `references/VERIFY.md`      | Frame strips, difference overlays, motion matrix                                                       |
-| `scripts/verify-icon.mjs`   | Default verify: rest + seek + `ig-*` assert + contact sheet (Node, all OS)                             |
-| `scripts/seek-shot.mjs`     | Freeze `?t=N` and screenshot                                                                           |
-| `scripts/contact-sheet.mjs` | Tile frames (ffmpeg or Playwright fallback)                                                            |
-| `scripts/smoke.mjs`         | Smoke tests — run `npm test`                                                                           |
-| `scripts/*.sh`              | Thin bash wrappers around the `.mjs` files                                                             |
+## Repo layout
 
-## The parts I would read first
-
-**The swap test.** Could these exact keyframes be pasted onto a different icon and still look fine? If yes, it is decoration. Most animated icon sets fail this: keyframes that translate the whole `<svg>` would look identical on any icon in the library.
-
-**Landing on rest.** Hovering an icon must never change what it looks like afterward, and that constraint shapes gestures more than anything else. There are four ways to satisfy it — symmetry, congruence, re-arming while invisible, and returning — and if you cannot name which one you are using, you do not have a gesture yet.
-
-**Verify the motion, not just the pixels.** A frame strip checks geometry. It cannot tell you how fast anything is going, and timing bugs are invisible in both the code and the render. Read the transform back off the browser's own computed matrix and differentiate it.
+```
+skills/
+  animating-icons/     # SVG icon gestures + morph + verify
+  motion-meaning/      # role → strategy → meaning under reduce
+docs/                  # Landing site (animating-icons today)
+AGENTS.md              # Notes for agents editing skills in this repo
+```
 
 ## Credit
 
-The morphing technique came from [Benji Taylor's article](https://benji.org/morphing-icons-with-claude). The timing instincts are [Emil Kowalski's](https://animations.dev) — his course is the thing to read on motion. Verify helpers are adapted from [iart-ai/web-animation-skills](https://github.com/iart-ai/web-animation-skills) (MIT), ported to cross-platform Node. Built by the team behind [Sora UI](https://ui.soralabs.io.vn/docs/icons).
+**animating-icons** — morphing from [Benji Taylor](https://benji.org/morphing-icons-with-claude); timing instincts from [Emil Kowalski](https://animations.dev); verify helpers adapted from [iart-ai/web-animation-skills](https://github.com/iart-ai/web-animation-skills) (MIT).
+
+**motion-meaning** — strategies distilled from [Sora UI production patterns](https://ui.soralabs.io.vn/blog/prefers-reduced-motion-react); audit report shape and library gotchas credited in [`skills/motion-meaning/references/CREDITS.md`](./skills/motion-meaning/references/CREDITS.md).
+
+Built by [SoraLabs](https://github.com/SoraLabsOSS) / [Sora UI](https://ui.soralabs.io.vn/).
 
 MIT.

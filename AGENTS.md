@@ -2,7 +2,7 @@
 
 Guidance for coding agents working in this repository.
 
-This project ships an [Agent Skill](https://agentskills.io/home) (`skills/animating-icons/`). Treat skill authoring and edits as work against the open Agent Skills standard — not ad-hoc prompt files.
+This project ships [Agent Skills](https://agentskills.io/home) under `skills/` (`animating-icons`, `motion-meaning`). Treat skill authoring and edits as work against the open Agent Skills standard — not ad-hoc prompt files.
 
 Source for the philosophy below: [Agent Skills Overview](https://agentskills.io/home) (agentskills.io).
 
@@ -67,6 +67,7 @@ Validate locally:
 
 ```bash
 npx skills-ref validate ./skills/animating-icons
+npx skills-ref validate ./skills/motion-meaning
 ```
 
 ---
@@ -78,12 +79,15 @@ npx skills-ref validate ./skills/animating-icons
 | [`skills/animating-icons/SKILL.md`](skills/animating-icons/SKILL.md)       | Lean skill brain — principle, gates, procedure, routing     |
 | [`skills/animating-icons/references/`](skills/animating-icons/references/) | On-demand depth (families, failures, morph, verify, …)      |
 | [`skills/animating-icons/scripts/`](skills/animating-icons/scripts/)       | Cross-platform verify helpers (Node); `.sh` = thin wrappers |
-| [`docs/`](docs/)                                                           | Landing site for the skill                                  |
+| [`skills/motion-meaning/SKILL.md`](skills/motion-meaning/SKILL.md)         | Reduced-motion role → strategy → meaning under reduce       |
+| [`skills/motion-meaning/references/`](skills/motion-meaning/references/)   | Classify, strategies, audit, patterns, failures, verify     |
+| [`skills/motion-meaning/scripts/`](skills/motion-meaning/scripts/)         | Dual-state verify harness (`verify-reduced.mjs`)            |
+| [`docs/`](docs/)                                                           | Landing site (animating-icons today; motion-meaning later)  |
 
-**Implications for agents editing this skill:**
+**Implications for agents editing these skills:**
 
 1. Keep `SKILL.md` lean; put detail in `references/` and link one level deep.
 2. Frontmatter `name` must match the skill directory; `description` must cover WHAT + WHEN (and useful negative triggers).
 3. Prefer progressive disclosure: discovery → activation → execution — do not dump every reference into `SKILL.md`.
-4. Scripts should be self-contained or declare deps in `compatibility` / headers; default verify entrypoint is `node skills/animating-icons/scripts/verify-icon.mjs`.
-5. After script changes, run `npm test` (smoke). After structural skill changes, run `npx skills-ref validate ./skills/animating-icons`.
+4. Scripts should be self-contained or declare deps in `compatibility` / headers. Verify entrypoints: `node skills/animating-icons/scripts/verify-icon.mjs`, `node skills/motion-meaning/scripts/verify-reduced.mjs`.
+5. After script changes, run `npm test` and/or `npm run test:motion-meaning`. After structural skill changes, run `npx skills-ref validate` on the skill folder you edited. Motion-meaning verify needs Playwright Chromium (first run downloads into `~/.cache/motion-meaning-verify`; CI may set `PLAYWRIGHT_BROWSERS_PATH`).

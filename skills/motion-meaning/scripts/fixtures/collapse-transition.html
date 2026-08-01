@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>mm fixture: collapse transition</title>
+    <style>
+      nav {
+        display: flex;
+        gap: 8px;
+        position: relative;
+        margin: 40px;
+        width: 280px;
+      }
+      button {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ccc;
+        background: #fff;
+      }
+      #pill {
+        position: absolute;
+        bottom: 0;
+        height: 3px;
+        width: 25%;
+        background: #2563eb;
+        left: 0;
+        transition: left 400ms ease;
+      }
+      #pill.instant {
+        transition: none;
+      }
+    </style>
+  </head>
+  <body>
+    <p>
+      Tab pill — under reduce, jump to active slot (collapse), do not leave
+      mid-slide.
+    </p>
+    <nav>
+      <button type="button" data-i="0">One</button>
+      <button type="button" data-i="1">Two</button>
+      <button type="button" data-i="2">Three</button>
+      <button type="button" data-i="3">Four</button>
+      <div id="pill"></div>
+    </nav>
+    <script>
+      (function () {
+        const q = new URLSearchParams(location.search);
+        const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const reduce = q.get("reduce") === "1" || mq.matches;
+        const active = 2; // known in state
+        const pill = document.getElementById("pill");
+        const leftPct = active * 25;
+
+        if (reduce) {
+          pill.classList.add("instant");
+          pill.style.left = leftPct + "%";
+          pill.dataset.collapsed = "1";
+        } else {
+          // Simulate "would animate from 0" — start at 0 then request end
+          pill.style.left = "0%";
+          pill.dataset.collapsed = "0";
+          requestAnimationFrame(() => {
+            pill.style.left = leftPct + "%";
+          });
+        }
+
+        window.__mm = {
+          contract: "collapse-transition",
+          reduce,
+          atTarget: Math.abs(parseFloat(pill.style.left) - leftPct) < 0.1,
+          collapsed: pill.dataset.collapsed === "1",
+        };
+        window.__ready = true;
+      })();
+    </script>
+  </body>
+</html>

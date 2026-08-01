@@ -5,7 +5,7 @@
     "url": "https://github.com/SoraLabsOSS"
   },
   "metadata": {
-    "description": "SoraLabs skills. Currently: animating-icons, a measured method for giving every SVG icon a gesture only that object could do."
+    "description": "SoraLabs skills: animating-icons (SVG icon gestures) and motion-meaning (prefers-reduced-motion so meaning survives)."
   },
   "plugins": [
     {
@@ -15,6 +15,24 @@
       "version": "1.3.1",
       "category": "design",
       "tags": ["icons", "svg", "animation", "motion", "design-engineering"],
+      "author": { "name": "SoraLabs" },
+      "homepage": "https://github.com/SoraLabsOSS/skills",
+      "repository": "https://github.com/SoraLabsOSS/skills",
+      "license": "MIT"
+    },
+    {
+      "name": "motion-meaning",
+      "source": ".",
+      "description": "Classify UI motion as communicative or decorative, then fix or apply prefers-reduced-motion so meaning survives under reduce. Four reduce strategies plus live preference, audit workflow, and dual-state verify harness.",
+      "version": "0.1.2",
+      "category": "design",
+      "tags": [
+        "accessibility",
+        "reduced-motion",
+        "animation",
+        "motion",
+        "react"
+      ],
       "author": { "name": "SoraLabs" },
       "homepage": "https://github.com/SoraLabsOSS/skills",
       "repository": "https://github.com/SoraLabsOSS/skills",

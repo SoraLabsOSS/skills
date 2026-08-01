@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>mm fixture: dead reduced branch (expect fail under reduce)</title>
+    <style>
+      .stack {
+        position: relative;
+        width: 120px;
+        height: 160px;
+        margin: 40px;
+      }
+      .card {
+        position: absolute;
+        inset: 0;
+        border: 2px solid #222;
+        background: #fafafa;
+        display: grid;
+        place-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Anti-pattern: outer reduce gate skips end-state applicator.</p>
+    <div class="stack">
+      <div class="card" data-card="0">A</div>
+      <div class="card" data-card="1">B</div>
+      <div class="card" data-card="2">C</div>
+    </div>
+    <script>
+      (function () {
+        const q = new URLSearchParams(location.search);
+        const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const reduce = q.get("reduce") === "1" || mq.matches;
+        const cards = [...document.querySelectorAll("[data-card]")];
+
+        function applyEndState() {
+          cards.forEach((el, i) => {
+            const dismiss = cards.length - 1 - i;
+            el.style.transform =
+              "translateY(" +
+              dismiss * -40 +
+              "px) rotate(" +
+              dismiss * 8 +
+              "deg)";
+            el.dataset.end = "1";
+          });
+        }
+
+        function mountCards() {
+          if (reduce) {
+            applyEndState();
+            return;
+          }
+          cards.forEach((el) => {
+            el.dataset.end = "0";
+          });
+        }
+
+        // BUG: shouldAnimate false under reduce → mountCards never called
+        const shouldAnimate = !reduce && cards.length > 0;
+        if (shouldAnimate) {
+          mountCards();
+        }
+
+        window.__mm = {
+          contract: "communicative-snap",
+          reduce,
+          allEnded: cards.every((el) => el.dataset.end === "1"),
+          anyEnded: cards.some((el) => el.dataset.end === "1"),
+          expectFailUnderReduce: true,
+        };
+        window.__ready = true;
+      })();
+    </script>
+  </body>
+</html>

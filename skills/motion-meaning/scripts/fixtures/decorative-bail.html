@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>mm fixture: decorative bail</title>
+    <style>
+      #cursor-layer {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #e11;
+        position: fixed;
+        top: 40px;
+        left: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Decorative cursor layer — must bail under reduce.</p>
+    <div id="cursor-layer" data-mm="decorative"></div>
+    <script>
+      (function () {
+        const q = new URLSearchParams(location.search);
+        const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const reduce = q.get("reduce") === "1" || mq.matches;
+        const layer = document.getElementById("cursor-layer");
+        if (reduce) {
+          layer.hidden = true;
+          layer.setAttribute("data-active", "false");
+        } else {
+          layer.hidden = false;
+          layer.setAttribute("data-active", "true");
+        }
+        window.__mm = {
+          contract: "decorative-bail",
+          reduce,
+          decorativeVisible: !layer.hidden,
+        };
+        window.__ready = true;
+      })();
+    </script>
+  </body>
+</html>

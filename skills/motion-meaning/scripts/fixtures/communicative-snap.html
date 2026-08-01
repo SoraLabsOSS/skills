@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>mm fixture: communicative snap</title>
+    <style>
+      .stack {
+        position: relative;
+        width: 120px;
+        height: 160px;
+        margin: 40px;
+      }
+      .card {
+        position: absolute;
+        inset: 0;
+        border: 2px solid #222;
+        background: #fafafa;
+        display: grid;
+        place-items: center;
+        font: 14px sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <p>
+      Scroll-stack stand-in — under reduce, snap to end state (not default
+      pile).
+    </p>
+    <div class="stack" id="stack">
+      <div class="card" data-card="0">A</div>
+      <div class="card" data-card="1">B</div>
+      <div class="card" data-card="2">C</div>
+    </div>
+    <script>
+      (function () {
+        const q = new URLSearchParams(location.search);
+        const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const reduce = q.get("reduce") === "1" || mq.matches;
+        const cards = [...document.querySelectorAll("[data-card]")];
+
+        function applyEndState() {
+          // Destination the "full" animation would have ended in.
+          cards.forEach((el, i) => {
+            const dismiss = cards.length - 1 - i;
+            el.style.transform =
+              "translateY(" +
+              dismiss * -40 +
+              "px) rotate(" +
+              dismiss * 8 +
+              "deg)";
+            el.dataset.end = "1";
+          });
+          cards[0].style.transform = "rotateY(180deg)";
+          cards[0].dataset.end = "1";
+        }
+
+        function mountCards() {
+          if (reduce) {
+            applyEndState();
+            return;
+          }
+          // Full motion stand-in: leave near-default; mark not-end.
+          cards.forEach((el) => {
+            el.style.transform = "";
+            el.dataset.end = "0";
+          });
+        }
+
+        // Correct gate: content exists — not (content && !reduce)
+        if (cards.length > 0) mountCards();
+
+        window.__mm = {
+          contract: "communicative-snap",
+          reduce,
+          allEnded: cards.every((el) => el.dataset.end === "1"),
+          anyEnded: cards.some((el) => el.dataset.end === "1"),
+        };
+        window.__ready = true;
+      })();
+    </script>
+  </body>
+</html>

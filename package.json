@@ -34,6 +34,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "node skills/animating-icons/scripts/smoke.mjs"
+    "test": "node skills/animating-icons/scripts/smoke.mjs",
+    "test:motion-meaning": "node skills/motion-meaning/scripts/smoke.mjs"
   }
 }
