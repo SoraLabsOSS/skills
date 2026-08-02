@@ -1,4 +1,4 @@
-import "./styles.css";
+import "../shared/styles.css";
 import "./home.css";
 
 const clockEl = document.getElementById("footer-clock");

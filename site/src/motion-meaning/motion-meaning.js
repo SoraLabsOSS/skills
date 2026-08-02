@@ -1,4 +1,4 @@
-import "./styles.css";
+import "../shared/styles.css";
 import "./motion-meaning.css";
 
 const track = document.getElementById("mm-track");

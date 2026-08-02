@@ -1,4 +1,4 @@
-import "./styles.css";
+import "../shared/styles.css";
 import { mountBell } from "./bell.js";
 import { mountChat } from "./chat.js";
 import { mountCalendar } from "./calendar.js";
