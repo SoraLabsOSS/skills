@@ -103,7 +103,7 @@ Landing: edit `site/`, push to `main` — Actions builds with Bun and deploys to
 
 ## Credit
 
-**animating-icons** — morphing from [Benji Taylor](https://benji.org/morphing-icons-with-claude); timing instincts from [Emil Kowalski](https://animations.dev); verify helpers adapted from [iart-ai/web-animation-skills](https://github.com/iart-ai/web-animation-skills) (MIT).
+**animating-icons** — derived from [kai956/animating-icons](https://github.com/kai956/animating-icons) (MIT, Bakai Tolondu); morphing from [Benji Taylor](https://benji.org/morphing-icons-with-claude); timing instincts from [Emil Kowalski](https://animations.dev); verify helpers adapted from [iart-ai/web-animation-skills](https://github.com/iart-ai/web-animation-skills) (MIT). See [`skills/animating-icons/LICENSE`](./skills/animating-icons/LICENSE).
 
 **motion-meaning** — strategies distilled from [Sora UI production patterns](https://ui.soralabs.io.vn/blog/prefers-reduced-motion-react); audit report shape and library gotchas credited in [`skills/motion-meaning/references/CREDITS.md`](./skills/motion-meaning/references/CREDITS.md).
 

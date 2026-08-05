@@ -5,7 +5,7 @@ description: >-
   (Hugeicons/Lucide/Phosphor). Use for animated icon, icon hover, per-icon
   gesture, icon morph, menu↔cross, stroke-dashoffset draw-on, pathLength,
   transform-box. Not for page transitions, Lottie, or general UI chrome motion.
-license: MIT
+license: MIT. See LICENSE
 compatibility: >-
   Verify with Node 18+; first run installs Playwright into
   ~/.cache/animating-icons-verify. Contact sheets use ffmpeg if present,
@@ -14,6 +14,7 @@ compatibility: >-
 metadata:
   author: SoraLabs
   version: "1.3.1"
+  origin: https://github.com/kai956/animating-icons
 ---
 
 # Animating Icons
